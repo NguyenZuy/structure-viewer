@@ -56,3 +56,6 @@ Thumbs.db
 # Written by the Performance Testing package during test runs/builds
 /[Aa]ssets/[Rr]esources/PerformanceTestRun*
 /[Aa]ssets/[Rr]esources.meta
+
+# Burst output of WebGL builds
+/[Dd]ata/
