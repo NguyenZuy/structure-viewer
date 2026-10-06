@@ -35,12 +35,12 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 | A2 | [Contracts, fixtures & fakes](a2-contracts.md) | 1.5 h | A1 | ☑ |
 | B01 | [JSON parser & load use case](b01-json-parser.md) | 1 h | A2 | ☑ |
 | B02 | [Sample house generator](b02-sample-generator.md) | 1.5 h | A2 | ☐ |
-| B03 | [Geometry & structure renderer](b03-structure-renderer.md) | 1.5 h | A2 | ☐ |
+| B03 | [Geometry & structure renderer](b03-structure-renderer.md) | 2.5 h | A2 | ☐ |
 | B04 | [Materials, textures & scene setup](b04-materials-setup.md) | 1 h | A2 | ☐ |
 | B05 | [Input gestures](b05-input-gestures.md) | 1 h | A2 | ☐ |
 | B06 | [Camera controller](b06-camera.md) | 1 h | A2 | ☐ |
 | B07 | [UI shell](b07-ui-shell.md) | 1.5 h | A2 | ☐ |
-| B08 | [WebGL build & perf spike](b08-webgl-perf-spike.md) | 1 h | A2 | ☑ (gate passed: no mesh combine) |
+| B08 | [WebGL build & perf spike](b08-webgl-perf-spike.md) | 1 h | A2 | ☑ (gate passed; mesh combining used anyway) |
 | B09 | [Selection & info panel](b09-selection-info.md) | 1.5 h | A2 | ☐ |
 | B10 | [Visibility & undo](b10-visibility-undo.md) | 1.5 h | A2 | ☐ |
 | B11 | [Display modes](b11-display-modes.md) | 2 h | A2 | ☐ |
@@ -52,7 +52,7 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 | C3 | [Polish](c3-polish.md) | 1 h | C2 | ☐ |
 | C4 | [Release: build, devices, deploy, README](c4-release.md) | 2 h | C3 | ☐ |
 
-Total ≈ 26 h of work. The contracts + composition phases add ~4–5 h over a tightly coupled plan; that cost is only repaid if B phases actually run in parallel. Working solo, use this order so something is visible by the end of day 1:
+Total ≈ 27 h of work. The contracts + composition phases add ~4–5 h over a tightly coupled plan; that cost is only repaid if B phases actually run in parallel. Working solo, use this order so something is visible by the end of day 1:
 
 **Day 1**: A1 → A2 → B08 (perf spike first: de-risk mobile) → B01 → B02 → B03 → B04 → B05 → B06 → B07 → **C1** (house on screen, phone build)
 **Day 2**: B09 → B10 → B11 → B12 → B13 → B14 → **C2** → C3 → C4
@@ -60,7 +60,7 @@ Total ≈ 26 h of work. The contracts + composition phases add ~4–5 h over a t
 If behind schedule, apply the DESIGN.md cut order: B14 labels → "visible only" in B13 → midpoint snapping in B12.
 
 ## Decision gates
-- **B08**: phone FPS with ~800 boxes < 30 → B03 must implement the assembly mesh-combine fallback (DESIGN.md › Rendering).
+- **B08**: passed (~60 FPS on a Xiaomi 14T). B03 combines meshes per assembly regardless (user decision 2026-10-07).
 - **C2**: X-ray on the phone < 30 FPS → hide slab/sheathing in X-ray rather than cutting the mode.
 
 ## Definition of done (every phase)

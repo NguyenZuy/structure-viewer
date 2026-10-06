@@ -10,7 +10,7 @@
 - [ ] Tune light direction, ambient gradient, wood tiling, grid fade, sheathing alpha against the background — check in all 4 modes.
 - [ ] Desktop tooltips; clear active-tool states.
 - [ ] Empty/edge states: nothing selected; everything hidden ("Everything is hidden — Show all"); load error.
-- [ ] Dev FPS counter only in `DEVELOPMENT_BUILD`; delete `Sandbox/` spike.
+- [ ] Dev FPS counter only in `DEVELOPMENT_BUILD`.
 
 ## Stretch (only if ahead)
 Exploded view, human scale figure, FPS/draw-call overlay (DESIGN.md › Stretch).

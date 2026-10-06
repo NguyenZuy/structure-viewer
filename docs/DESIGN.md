@@ -95,10 +95,11 @@ Point lists are flat because `JsonUtility` can't deserialize nested arrays.
 - **Members use generated box meshes, not scaled cubes**: UVs are in metres along the member axis, so wood grain follows each member and never stretches. Mesh generation is pure C# (`BoxMeshBuilder`) and unit-tested. Meshes are cached per `(width, depth, length)`.
 - One shared material per look (wood, slab, sheathing, highlight-member, highlight-assembly, hover) → SRP Batcher compatible. Highlight = swap shared material. **No `MaterialPropertyBlock`** (breaks SRP Batcher).
 - Wood: URP Lit + CC0 wood albedo/normal from ambientCG (1K, compressed). Concrete slab from ambientCG too. Credit source + licence in README; textures live in `Assets/_Project/Art/Textures/`. Slab: concrete/brick-red tint. Sheathing: URP Lit Transparent, translucent violet, rendered after opaques.
-- One GameObject + `BoxCollider` per member; panels/slab use `MeshCollider` (convex off, static).
+- **Combined meshes per assembly**: each `group` is drawn as one mesh per material in use (`(group, material)` chunk), built from the per-element meshes transformed to world space. ~800 elements → a few dozen draw calls. `SetVisible`/`SetMaterial` only mark the group dirty; dirty groups are rebuilt once per frame (reusing their `Mesh` objects), so selecting a whole assembly costs one rebuild. Elements without a group form their own chunk.
+- Picking stays per element: one collider-only GameObject per element (`BoxCollider` for members, `MeshCollider` for panels/slab, convex off, static), no renderer.
 - **Lighting: no realtime shadows, no SSAO.** Bright gradient ambient + one directional light (shadows off). Depth comes from the wood texture, normal map, slab edge and a faint ground grid.
 - Measure line uses a tiny unlit `ZTest Always` shader so it is always visible.
-- **Performance risk**: ~800 draw calls may be too many for mobile WebGL. Measure on a phone early (end of day 1). Fallback: combine each assembly (`group`) into one mesh with per-vertex member index, rebuild on visibility change.
+- **Performance**: the B08 spike held ~60 FPS on a Xiaomi 14T with 1600 separate renderers, but mesh combining is used anyway (decision 2026-10-07) for headroom on weaker phones and fewer draw calls.
 
 ## Features
 

@@ -23,7 +23,7 @@ Build size: Release (Brotli, LTO) 8.5 MB; Fast (Gzip, no LTO) 11.5 MB. Build tim
 
 Known issue (spike only): the phone never delivered the POST to `/bench` (stuck on "Sending results"); desktop did. Results were read from the screen instead.
 
-**Gate outcome: passed.** Opaque and X-ray both far above 30 FPS at 2× the target member count → B03 keeps one GameObject per element; X-ray keeps slab/sheathing. Caveat: the 14T is upper mid-range; re-check on a weaker phone in C4 if one is available.
+**Gate outcome: passed** (opaque and X-ray far above 30 FPS at 2× the target member count; X-ray keeps slab/sheathing). **Decision 2026-10-07 (user): B03 combines meshes per assembly anyway** for headroom on weaker phones — the 14T is upper mid-range. Spike scene, scripts and assets were deleted afterwards (see git history, commit `c51dda7`, to rerun).
 
 ## Decision
 - Opaque ≥ 30 FPS on the phone → B03 keeps one GameObject per element.
@@ -34,4 +34,4 @@ Known issue (spike only): the phone never delivered the POST to `/bench` (stuck 
 - EditMode: `QualitySelector` maps mobile → Mobile level, desktop → PC level (logic extracted to a pure function).
 
 ## Hand-off to C
-- C1: call `QualitySelector` first thing in `AppBootstrap`; build `Main.unity` instead of the spike scene. Delete the spike scene before C4.
+- C1: call `QualitySelector` first thing in `AppBootstrap`; *Build WebGL (Fast)* for device checks, *Build WebGL* for release. Serve on the LAN with `python Tools/serve_webgl.py Builds/WebGL`.
