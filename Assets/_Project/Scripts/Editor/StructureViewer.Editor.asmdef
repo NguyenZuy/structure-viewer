@@ -1,0 +1,22 @@
+{
+    "name": "StructureViewer.Editor",
+    "rootNamespace": "StructureViewer.Editor",
+    "references": [
+        "StructureViewer.Domain",
+        "StructureViewer.Application",
+        "StructureViewer.Infrastructure",
+        "StructureViewer.Presentation",
+        "StructureViewer.Bootstrap"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

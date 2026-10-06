@@ -1,0 +1,20 @@
+{
+    "name": "StructureViewer.Bootstrap",
+    "rootNamespace": "StructureViewer.Bootstrap",
+    "references": [
+        "StructureViewer.Domain",
+        "StructureViewer.Application",
+        "StructureViewer.Infrastructure",
+        "StructureViewer.Presentation",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

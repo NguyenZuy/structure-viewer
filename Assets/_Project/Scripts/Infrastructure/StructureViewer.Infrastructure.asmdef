@@ -1,0 +1,17 @@
+{
+    "name": "StructureViewer.Infrastructure",
+    "rootNamespace": "StructureViewer.Infrastructure",
+    "references": [
+        "StructureViewer.Domain",
+        "StructureViewer.Application"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

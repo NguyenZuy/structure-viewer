@@ -1,0 +1,27 @@
+{
+    "name": "StructureViewer.Tests.PlayMode",
+    "rootNamespace": "StructureViewer.Tests.PlayMode",
+    "references": [
+        "StructureViewer.Domain",
+        "StructureViewer.Application",
+        "StructureViewer.Infrastructure",
+        "StructureViewer.Presentation",
+        "StructureViewer.Bootstrap",
+        "StructureViewer.Tests.Fixtures",
+        "UnityEngine.TestRunner",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

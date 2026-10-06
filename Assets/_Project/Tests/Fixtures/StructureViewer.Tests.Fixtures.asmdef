@@ -1,0 +1,25 @@
+{
+    "name": "StructureViewer.Tests.Fixtures",
+    "rootNamespace": "StructureViewer.Tests.Fixtures",
+    "references": [
+        "StructureViewer.Domain",
+        "StructureViewer.Application",
+        "StructureViewer.Infrastructure",
+        "StructureViewer.Presentation",
+        "StructureViewer.Bootstrap",
+        "UnityEngine.TestRunner"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
