@@ -73,14 +73,19 @@ namespace StructureViewer.Sandbox.Editor
             Debug.Log($"Perf spike scene created at {ScenePath}.");
         }
 
-        [MenuItem("Tools/Structure Viewer/Sandbox/Build Perf Spike")]
-        public static void Build()
+        [MenuItem("Tools/Structure Viewer/Sandbox/Build Perf Spike (Fast)")]
+        public static void BuildFast() => Build(WebGLBuildMode.Fast);
+
+        [MenuItem("Tools/Structure Viewer/Sandbox/Build Perf Spike (Release)")]
+        public static void BuildRelease() => Build(WebGLBuildMode.Release);
+
+        private static void Build(WebGLBuildMode mode)
         {
             if (!File.Exists(ScenePath))
                 CreateScene();
-            var report = WebGLBuild.Build(new[] { ScenePath }, OutputPath);
+            var report = WebGLBuild.Build(new[] { ScenePath }, OutputPath, mode);
             if (report.summary.result == BuildResult.Succeeded)
-                Debug.Log($"Serve it on the LAN:  python -m http.server 8000 --directory {OutputPath}");
+                Debug.Log($"Serve it on the LAN and open /?bench:  python Tools/serve_webgl.py {OutputPath}");
         }
 
         private static Material CreateMaterial(string name, Shader shader, Color color, bool transparent)

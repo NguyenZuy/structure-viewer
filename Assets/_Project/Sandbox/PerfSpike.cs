@@ -1,14 +1,22 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using StructureViewer.Infrastructure.Quality;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace StructureViewer.Sandbox
 {
     // Throwaway B08 spike (delete before release): spawns N timber-like members as separate renderers
     // with one shared material and reports FPS, so a phone can answer "is one GameObject per member OK?".
+    // URL parameters: ?count=1600&mode=xray, and ?bench to run a fixed sequence and POST results to /bench.
     public sealed class PerfSpike : MonoBehaviour
     {
+        private const float WarmupSeconds = 2f;
+        private const float MeasureSeconds = 8f;
         private static readonly int[] Counts = { 400, 800, 1600 };
+        private static readonly (int Count, bool XRay)[] BenchSteps = { (800, false), (800, true), (1600, false), (1600, true) };
 
         [SerializeField] private Material _wood;
         [SerializeField] private Material _xray;
@@ -19,9 +27,13 @@ namespace StructureViewer.Sandbox
         [SerializeField] private int _count = 800;
 
         private readonly List<MeshRenderer> _members = new List<MeshRenderer>();
+        private readonly List<float> _frameTimes = new List<float>(4096);
+        private readonly List<string> _benchLines = new List<string>();
         private Transform _root;
         private bool _xrayMode;
         private bool _orbit = true;
+        private bool _recording;
+        private string _benchStatus;
         private float _yaw = -35f;
         private float _smoothedDelta = 1f / 60f;
         private float _worstDelta;
@@ -29,15 +41,48 @@ namespace StructureViewer.Sandbox
         private GUIStyle _label;
         private GUIStyle _button;
 
+        [Serializable]
+        private sealed class BenchReport
+        {
+            public string url;
+            public string quality;
+            public bool isMobile;
+            public int screenWidth;
+            public int screenHeight;
+            public string gpu;
+            public string os;
+            public BenchStep[] steps;
+        }
+
+        [Serializable]
+        private sealed class BenchStep
+        {
+            public int members;
+            public string mode;
+            public int frames;
+            public float avgFps;
+            public float p50Ms;
+            public float p95Ms;
+            public float worstMs;
+        }
+
         private void Awake()
         {
             QualitySelector.Apply();
+            var query = ParseQuery(UnityEngine.Application.absoluteURL);
+            if (query.TryGetValue("count", out var countText) && int.TryParse(countText, out int count) && count > 0)
+                _count = count;
+            _xrayMode = query.TryGetValue("mode", out var mode) && mode == "xray";
             Spawn(_count);
+            if (query.ContainsKey("bench"))
+                StartCoroutine(RunBenchmark());
         }
 
         private void Update()
         {
             float dt = Time.unscaledDeltaTime;
+            if (_recording)
+                _frameTimes.Add(dt);
             _smoothedDelta = Mathf.Lerp(_smoothedDelta, dt, 0.05f);
             if (dt > _worstDelta)
                 _worstDelta = dt;
@@ -61,14 +106,24 @@ namespace StructureViewer.Sandbox
             if (_label == null)
             {
                 _label = new GUIStyle(GUI.skin.label) { fontSize = 16 };
+                _label.normal.textColor = new Color(0.1f, 0.1f, 0.12f);
                 _button = new GUIStyle(GUI.skin.button) { fontSize = 16 };
             }
 
             var quality = QualitySettings.names[QualitySettings.GetQualityLevel()];
-            GUILayout.BeginArea(new Rect(10f, 10f, 360f, 400f));
+            GUILayout.BeginArea(new Rect(10f, 10f, 380f, 600f));
             GUILayout.Label($"{1f / _smoothedDelta:F0} FPS  ({_smoothedDelta * 1000f:F1} ms, worst {_worstDelta * 1000f:F0} ms)", _label);
             GUILayout.Label($"{_members.Count} members · {(_xrayMode ? "X-ray" : "Opaque")} · {quality}", _label);
             GUILayout.Label($"{Screen.width}×{Screen.height} · mobile={UnityEngine.Application.isMobilePlatform}", _label);
+
+            if (_benchStatus != null)
+            {
+                GUILayout.Label(_benchStatus, _label);
+                foreach (var line in _benchLines)
+                    GUILayout.Label(line, _label);
+                GUILayout.EndArea();
+                return;
+            }
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button(_xrayMode ? "Opaque" : "X-ray", _button, GUILayout.Height(44f)))
@@ -87,6 +142,93 @@ namespace StructureViewer.Sandbox
             GUILayout.EndArea();
         }
 
+        private IEnumerator RunBenchmark()
+        {
+            var report = new BenchReport
+            {
+                url = UnityEngine.Application.absoluteURL,
+                quality = QualitySettings.names[QualitySettings.GetQualityLevel()],
+                isMobile = UnityEngine.Application.isMobilePlatform,
+                screenWidth = Screen.width,
+                screenHeight = Screen.height,
+                gpu = SystemInfo.graphicsDeviceName,
+                os = SystemInfo.operatingSystem,
+                steps = new BenchStep[BenchSteps.Length]
+            };
+
+            for (int i = 0; i < BenchSteps.Length; i++)
+            {
+                var (count, xray) = BenchSteps[i];
+                string mode = xray ? "xray" : "opaque";
+                _benchStatus = $"Benchmark {i + 1}/{BenchSteps.Length}: {count} {mode}…";
+                _xrayMode = xray;
+                Spawn(count);
+                yield return new WaitForSecondsRealtime(WarmupSeconds);
+
+                _frameTimes.Clear();
+                _recording = true;
+                yield return new WaitForSecondsRealtime(MeasureSeconds);
+                _recording = false;
+
+                var step = Summarize(count, mode);
+                report.steps[i] = step;
+                _benchLines.Add($"{count} {mode}: {step.avgFps:F1} FPS, p95 {step.p95Ms:F1} ms, worst {step.worstMs:F0} ms");
+            }
+
+            string json = JsonUtility.ToJson(report);
+            Debug.Log("BENCH " + json);
+            _benchStatus = "Sending results…";
+
+            var url = new Uri(new Uri(UnityEngine.Application.absoluteURL), "bench").ToString();
+            using (var request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST))
+            {
+                request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+                yield return request.SendWebRequest();
+                _benchStatus = request.result == UnityWebRequest.Result.Success
+                    ? "Benchmark done, results sent."
+                    : $"Benchmark done, sending failed: {request.error}";
+            }
+        }
+
+        private BenchStep Summarize(int count, string mode)
+        {
+            var sorted = new List<float>(_frameTimes);
+            sorted.Sort();
+            float total = 0f;
+            foreach (float t in sorted)
+                total += t;
+            int n = sorted.Count;
+            return new BenchStep
+            {
+                members = count,
+                mode = mode,
+                frames = n,
+                avgFps = n > 0 ? n / total : 0f,
+                p50Ms = n > 0 ? sorted[n / 2] * 1000f : 0f,
+                p95Ms = n > 0 ? sorted[Mathf.Min(n - 1, (int)(n * 0.95f))] * 1000f : 0f,
+                worstMs = n > 0 ? sorted[n - 1] * 1000f : 0f
+            };
+        }
+
+        private static Dictionary<string, string> ParseQuery(string url)
+        {
+            var result = new Dictionary<string, string>();
+            int start = string.IsNullOrEmpty(url) ? -1 : url.IndexOf('?');
+            if (start < 0)
+                return result;
+            foreach (var part in url.Substring(start + 1).Split('&'))
+            {
+                if (part.Length == 0)
+                    continue;
+                int eq = part.IndexOf('=');
+                string key = Uri.UnescapeDataString(eq < 0 ? part : part.Substring(0, eq));
+                result[key] = eq < 0 ? string.Empty : Uri.UnescapeDataString(part.Substring(eq + 1));
+            }
+            return result;
+        }
+
         private void Spawn(int count)
         {
             if (_root != null)
@@ -95,8 +237,7 @@ namespace StructureViewer.Sandbox
             _root = new GameObject("Spike").transform;
 
             AddBox("Slab", new Vector3(5f, -0.15f, 4f), Quaternion.identity, new Vector3(10f, 0.3f, 8f), _concrete);
-            var slope = Quaternion.Euler(-22.5f, 0f, 0f);
-            AddBox("Roof-S", new Vector3(5f, 6.2f, 2f), slope, new Vector3(10.4f, 0.012f, 4.4f), _sheathing);
+            AddBox("Roof-S", new Vector3(5f, 6.2f, 2f), Quaternion.Euler(-22.5f, 0f, 0f), new Vector3(10.4f, 0.012f, 4.4f), _sheathing);
             AddBox("Roof-N", new Vector3(5f, 6.2f, 6f), Quaternion.Euler(22.5f, 0f, 0f), new Vector3(10.4f, 0.012f, 4.4f), _sheathing);
 
             var segments = HouseSegments(count);
