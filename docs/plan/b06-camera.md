@@ -2,7 +2,7 @@
 
 **Goal**: smooth orbit/pan/zoom camera with fit-all and focus, implementing `ICameraControl` and driven by `IPointerEvents`.
 **Estimate**: 1 h · **Needs**: A2
-**Owns**: `Scripts/Presentation/Camera/`, `Tests/EditMode/Camera/`, `Tests/PlayMode/Camera/`
+**Owns**: `Scripts/Presentation/CameraControl/`, `Tests/EditMode/CameraControl/`, `Tests/PlayMode/CameraControl/` (not `Camera/`: a `…Camera` namespace would shadow `UnityEngine.Camera`)
 
 ## Tasks
 - [ ] `CameraFraming` (pure): distance to fit `Bounds` for vertical FOV **and aspect** (portrait phones are the hard case), with margin.

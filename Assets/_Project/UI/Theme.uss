@@ -1,0 +1,41 @@
+/* Design tokens only. Every panel stylesheet imports this file and uses var(--token). */
+:root {
+    /* Surfaces */
+    --color-bg: #1E1F22;
+    --color-surface: #2B2D31;
+    --color-surface-raised: #35373C;
+    --color-border: #43454B;
+    --color-overlay: rgba(0, 0, 0, 0.45);
+
+    /* Text */
+    --color-text: #E6E6E6;
+    --color-text-muted: #9A9CA3;
+    --color-text-disabled: #5F6168;
+
+    /* Accents: orange = member selection / measure, blue = assembly selection */
+    --color-accent: #FF8A1F;
+    --color-accent-pressed: #D96F0E;
+    --color-assembly: #3D8BFF;
+    --color-error: #E5484D;
+    --color-success: #3FB950;
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-s: 8px;
+    --space-m: 12px;
+    --space-l: 16px;
+    --space-xl: 24px;
+
+    /* Sizes */
+    --touch-target: 44px;
+    --radius-s: 4px;
+    --radius-m: 8px;
+    --panel-width: 320px;
+    --toolbar-height: 52px;
+
+    /* Typography */
+    --font-size-s: 12px;
+    --font-size-m: 14px;
+    --font-size-l: 16px;
+    --font-size-xl: 20px;
+}

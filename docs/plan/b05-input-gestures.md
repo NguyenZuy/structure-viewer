@@ -10,7 +10,7 @@
   - Double tap: second tap within 300 ms and 20 px (DPI-scaled).
   - Mouse: LMB drag → orbit, RMB/MMB drag → pan, wheel → zoom at cursor.
   - Touch: 1 finger → orbit, 2 fingers → pan (centroid delta) + pinch (distance ratio) at centroid; lifting one finger mid-gesture doesn't emit a tap.
-- [ ] `PointerInput : MonoBehaviour, IPointerEvents` — Input System `Mouse` + `EnhancedTouch`; ignores pointers that start over UI Toolkit (`panel.Pick` on the shared `PanelSettings`); exposes `additive` (Ctrl) and `PointerType`; hover events only for mouse.
+- [ ] `PointerInput : MonoBehaviour, IPointerEvents` — Input System `Mouse` + `EnhancedTouch`; ignores pointers that start over UI Toolkit (`panel.Pick` on the shared `PanelSettings`); exposes `additive` (Ctrl) and `PointerDevice`; hover events only for mouse.
 
 ## Tests (EditMode, on `GestureClassifier`)
 - Small move → tap; beyond threshold → orbit, no tap.

@@ -88,6 +88,7 @@ Implementation plan, one file per phase: [docs/plan/](docs/plan/README.md). Tick
 - `PascalCase` types/methods/properties, `_camelCase` private fields, `camelCase` locals/params, `I` prefix for interfaces.
 - `[SerializeField] private` instead of public fields. No `GameObject.Find`, `FindObjectOfType`, or singletons — wire through Bootstrap.
 - `sealed` by default for classes not designed for inheritance.
+- Inside `StructureViewer.*`, the `StructureViewer.Application` namespace shadows `UnityEngine.Application`: write `UnityEngine.Application.isMobilePlatform`. Don't name feature folders after Unity types you use (`Camera`, `PointerType`…) — the mirrored namespace/type would shadow them.
 - Avoid allocations in `Update` and hot paths (no LINQ, closures, string concat, boxing there).
 - Async: use Unity's `Awaitable` (main thread). Always pass/observe a `CancellationToken` (e.g. `destroyCancellationToken`).
 

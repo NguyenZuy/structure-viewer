@@ -31,8 +31,8 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 
 | ID | Phase | Est. | Needs | Status |
 |---|---|---|---|---|
-| A1 | [Foundation](a1-foundation.md) | 1 h | — | ☐ |
-| A2 | [Contracts, fixtures & fakes](a2-contracts.md) | 1.5 h | A1 | ☐ |
+| A1 | [Foundation](a1-foundation.md) | 1 h | — | ☑ (build target switch pending) |
+| A2 | [Contracts, fixtures & fakes](a2-contracts.md) | 1.5 h | A1 | ☑ |
 | B01 | [JSON parser & load use case](b01-json-parser.md) | 1 h | A2 | ☐ |
 | B02 | [Sample house generator](b02-sample-generator.md) | 1.5 h | A2 | ☐ |
 | B03 | [Geometry & structure renderer](b03-structure-renderer.md) | 1.5 h | A2 | ☐ |
