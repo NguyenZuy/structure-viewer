@@ -49,6 +49,7 @@
         productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
         productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
         devicePixelRatio: dpr,
+        autoSyncPersistentDataPath: true,
       }, function (progress) {
         fill.style.width = (progress * 100) + "%";
       }).then(function () {
