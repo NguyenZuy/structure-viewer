@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <style>
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #1E1F22; }
+      /* touch-action: none keeps the browser from scrolling/zooming the page while orbiting or pinching. */
+      #unity-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; background: #1E1F22; touch-action: none; outline: none; }
+      #loader { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+                font: 14px system-ui, sans-serif; color: #9A9CA3; pointer-events: none; }
+      #bar { width: min(60vw, 280px); height: 4px; border-radius: 2px; background: #35373C; overflow: hidden; }
+      #fill { width: 0; height: 100%; background: #FF8A1F; transition: width 0.2s; }
+      #error { color: #E5484D; max-width: 80vw; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <div id="loader">
+      <div id="bar"><div id="fill"></div></div>
+      <div id="status">Loading {{{ PRODUCT_NAME }}}…</div>
+    </div>
+    <script src="Build/{{{ LOADER_FILENAME }}}"></script>
+    <script>
+      // Phones report devicePixelRatio 3+; rendering at full DPR costs far more fill rate than it adds detail.
+      // ?dpr=1.5 overrides the cap for performance testing.
+      var dprParam = parseFloat(new URLSearchParams(location.search).get("dpr"));
+      var dpr = isFinite(dprParam) && dprParam > 0 ? dprParam : Math.min(window.devicePixelRatio || 1, 2);
+
+      var fill = document.getElementById("fill");
+      createUnityInstance(document.getElementById("unity-canvas"), {
+        arguments: [],
+#if PROGRESSIVE_ASSET_LOADING
+        primaryDataUrls: {{{ JSON.stringify(PRIMARY_DATA_FILES) }}},
+        secondaryDataUrls: {{{ JSON.stringify(SECONDARY_DATA_FILES) }}},
+#else
+        dataUrl: "Build/{{{ DATA_FILENAME }}}",
+#endif
+        frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_WASM
+        codeUrl: "Build/{{{ CODE_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        devicePixelRatio: dpr,
+      }, function (progress) {
+        fill.style.width = (progress * 100) + "%";
+      }).then(function () {
+        document.getElementById("loader").remove();
+      }).catch(function (message) {
+        var status = document.getElementById("status");
+        status.id = "error";
+        status.textContent = message;
+      });
+    </script>
+  </body>
+</html>
