@@ -5,9 +5,9 @@
 **Owns**: `Scripts/Infrastructure/Parsing/` (except `StructureDto.cs`), `Scripts/Application/Loading/LoadStructureUseCase.cs`, `Tests/EditMode/Parsing/`
 
 ## Tasks
-- [ ] `JsonStructureParser : IStructureParser` — `JsonUtility.FromJson<StructureDto>`, validate, convert mm/Z-up → m/Y-up via `ModelAxes`; collect **all** errors (with element id), never throw on bad input.
-- [ ] Validation: unknown `units`/`upAxis`; duplicate ids; unknown level/category; section ≤ 0; zero-length member; panel corner count ≠ 12 floats, non-planar (> 1 mm) or degenerate; slab outline < 3 points or non-convex; missing `roll` → 0.
-- [ ] `LoadStructureUseCase.Execute(string json)` — parse; on success set `StructureSession` + publish `StructureLoaded`; return `ParseResult`.
+- [x] `JsonStructureParser : IStructureParser` — `JsonUtility.FromJson<StructureDto>`, validate, convert mm/Z-up → m/Y-up via `ModelAxes`; collect **all** errors (with element id), never throw on bad input.
+- [x] Validation (in pure `StructureDtoConverter`, so it is testable without the engine): unknown `units`/`upAxis`; duplicate ids; unknown level/category; section ≤ 0; zero-length member; panel corner count ≠ 12 floats, non-planar (> 1 mm) or degenerate; slab outline < 3 points or non-convex; missing `roll` → 0; missing id/type → error; missing `group` → no group; slab group = its id.
+- [x] `LoadStructureUseCase.Execute(string json)` — parse; on success set `StructureSession` + publish `StructureLoaded`; return `ParseResult`.
 
 ## Tests (EditMode)
 - DESIGN.md sample snippet parses; positions converted `(x, y, z) mm → (x, z, y) m`.
