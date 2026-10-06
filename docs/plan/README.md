@@ -40,7 +40,7 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 | B05 | [Input gestures](b05-input-gestures.md) | 1 h | A2 | ☐ |
 | B06 | [Camera controller](b06-camera.md) | 1 h | A2 | ☐ |
 | B07 | [UI shell](b07-ui-shell.md) | 1.5 h | A2 | ☐ |
-| B08 | [WebGL build & perf spike](b08-webgl-perf-spike.md) | 1 h | A2 | ☐ |
+| B08 | [WebGL build & perf spike](b08-webgl-perf-spike.md) | 1 h | A2 | ☑ (gate passed: no mesh combine) |
 | B09 | [Selection & info panel](b09-selection-info.md) | 1.5 h | A2 | ☐ |
 | B10 | [Visibility & undo](b10-visibility-undo.md) | 1.5 h | A2 | ☐ |
 | B11 | [Display modes](b11-display-modes.md) | 2 h | A2 | ☐ |
