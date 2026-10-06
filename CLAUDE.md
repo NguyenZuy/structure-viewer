@@ -1,6 +1,8 @@
 # Structure Viewer
 
-Unity 6 (`6000.6.3f1`) + URP project. **Target platform: WebGL.**
+Unity 6 (`6000.6.3f1`) + URP project. **Target platform: WebGL, must work well on both PC and mobile browsers.** Unity only, no backend. UI Toolkit for UI.
+
+Feature spec, data schema and scope: [docs/DESIGN.md](docs/DESIGN.md). Read it before implementing or changing a feature; anything listed under "Out" needs the user's OK first.
 
 ## Ground rules
 
@@ -8,6 +10,7 @@ Unity 6 (`6000.6.3f1`) + URP project. **Target platform: WebGL.**
 - Follow **SOLID**, but layer only as deep as the feature needs (see "Avoid over-engineering").
 - Comment only non-obvious logic (why, not what). One short line is the norm; no XML doc on self-explanatory members, no banner/section comments.
 - Every change to important or bug-prone logic ships with tests (see "Testing").
+- **Every feature must work well on PC and mobile** (see "PC + mobile"). A feature that only works with mouse/keyboard is not done.
 
 ## Architecture
 
@@ -65,14 +68,19 @@ Assets/_Project/
     Presentation/      StructureViewer.Presentation.asmdef  (<Feature>/<Feature>Presenter.cs, <Feature>View.cs, I<Feature>View.cs)
     Infrastructure/    StructureViewer.Infrastructure.asmdef
     Bootstrap/         StructureViewer.Bootstrap.asmdef
+    Editor/            StructureViewer.Editor.asmdef        (Editor only: sample generator, scene setup, build tools)
   Tests/
+    Fixtures/          StructureViewer.Tests.Fixtures.asmdef (TestStructures + fakes, shared by both test assemblies)
     EditMode/          StructureViewer.Tests.EditMode.asmdef (Editor only)
     PlayMode/          StructureViewer.Tests.PlayMode.asmdef
-  Scenes/ Prefabs/ Materials/ Shaders/ Art/
+  Data/ Scenes/ Prefabs/ Materials/ Shaders/ Art/ UI/
 ```
 
+Implementation plan, one file per phase: [docs/plan/](docs/plan/README.md). Tick checklists and update the status table as phases complete. In a B (feature) phase, only touch the folders that phase **Owns**; cross-feature types go in A2 contracts.
+
 - Group by **feature inside each layer** (`Presentation/Selection/`, `Application/Selection/`), not by type.
-- Asmdef references must respect layer direction; Domain/Application asmdefs set `noEngineReferences` where possible.
+- Asmdef references must respect layer direction. Reference other asmdefs **by name**, not `GUID:` (GUIDs don't exist until Unity imports the asset).
+- Test asmdefs: `defineConstraints: ["UNITY_INCLUDE_TESTS"]`, `overrideReferences: true` + `precompiledReferences: ["nunit.framework.dll"]`, reference `UnityEngine.TestRunner` (and `UnityEditor.TestRunner` for EditMode, with `includePlatforms: ["Editor"]`).
 - Namespaces mirror folders: `StructureViewer.<Layer>.<Feature>`.
 
 ## C# conventions
@@ -82,6 +90,15 @@ Assets/_Project/
 - `sealed` by default for classes not designed for inheritance.
 - Avoid allocations in `Update` and hot paths (no LINQ, closures, string concat, boxing there).
 - Async: use Unity's `Awaitable` (main thread). Always pass/observe a `CancellationToken` (e.g. `destroyCancellationToken`).
+
+## PC + mobile
+
+- **Input**: every interaction supports mouse and touch (Input System pointer/touch APIs). Gesture mapping lives in one input adapter, not scattered across views.
+- **No keyboard-only or hover-only features**: every shortcut has an on-screen button; hover is a bonus, never the only way to see information.
+- **Responsive UI**: layouts work from ~360 px wide portrait up to desktop. Touch targets ≥ 44 px. Panels collapse on narrow screens. Respect safe areas.
+- **Performance**: no realtime shadows, no SSAO or other heavy post-processing. Target 60 FPS on desktop, ≥ 30 FPS on a mid-range phone. Keep draw calls and texture sizes low (≤ 1024 px textures, compressed).
+- **Quality**: use `Mobile_RPAsset` when `Application.isMobilePlatform`, `PC_RPAsset` otherwise. Don't add a setting that is only tuned for one of them.
+- Size thresholds (snap radius, drag threshold) scale with screen DPI / pointer type.
 
 ## WebGL constraints
 
@@ -115,7 +132,9 @@ Conventions:
 - Hand-written fakes over mocking frameworks. No real network in tests.
 - Fix a bug → add a test that reproduces it first.
 
-Run tests from CLI (Editor must be closed for this project):
+### Running tests
+
+Batchmode can't open the project while the Editor has it open. **If `Temp/UnityLockfile` exists, don't run these** — ask the user to run them from Window > General > Test Runner and report results.
 
 ```bash
 "/c/Program Files/Unity/Hub/Editor/6000.6.3f1/Editor/Unity.exe" -batchmode -projectPath . -runTests -testPlatform EditMode -testResults ./Logs/editmode-results.xml -logFile ./Logs/editmode.log
@@ -125,8 +144,12 @@ Run tests from CLI (Editor must be closed for this project):
 "/c/Program Files/Unity/Hub/Editor/6000.6.3f1/Editor/Unity.exe" -batchmode -projectPath . -runTests -testPlatform PlayMode -testResults ./Logs/playmode-results.xml -logFile ./Logs/playmode.log
 ```
 
-## Working in this repo
+Non-zero exit = compile error or failed tests. Read failures from the results XML; compile errors are in the `.log` (search `error CS`).
 
+## Workflow
+
+- After changing C#: run EditMode tests (PlayMode too if Views/Bootstrap/Infrastructure changed). Don't report done with failing tests or compile errors.
 - Never edit `Library/`, `Temp/`, `Logs/`, `UserSettings/`, or generated `*.csproj`/`*.slnx`.
-- Every new asset/folder needs its `.meta` file; let Unity generate it — don't hand-write GUIDs.
-- Don't modify `ProjectSettings/` or `Packages/manifest.json` without saying so explicitly in the summary.
+- Don't hand-write `.meta` files or GUIDs; Unity generates them on import. Commit each asset together with its `.meta`.
+- Don't modify `ProjectSettings/` or `Packages/manifest.json` without calling it out explicitly in the summary.
+- Commit messages: imperative, English, short subject line.
