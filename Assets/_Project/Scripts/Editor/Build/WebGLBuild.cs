@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
+using UnityEditor.Build.Profile;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -40,7 +41,7 @@ namespace StructureViewer.Editor.Build
             PlayerSettings.SetManagedStrippingLevel(target, ManagedStrippingLevel.Low);
             PlayerSettings.stripEngineCode = true;
 
-            UnityEditor.WebGL.UserBuildSettings.codeOptimization = UnityEditor.WebGL.WasmCodeOptimization.DiskSize;
+            UnityEditor.WebGL.UserBuildSettings.codeOptimization = UnityEditor.WebGL.WasmCodeOptimization.DiskSizeLTO;
             // ASTC: native on iOS and most Android GPUs; desktop browsers decompress the few textures at load.
             EditorUserBuildSettings.webGLBuildSubtarget = WebGLTextureSubtarget.ASTC;
 
@@ -81,9 +82,11 @@ namespace StructureViewer.Editor.Build
                 options = BuildOptions.None
             };
 
+            // Unity 6.6 has no profile-less platform: the active Build Profile (Web - Mobile - Release) supplies platform settings.
+            var profile = BuildProfile.GetActiveBuildProfile();
             var report = BuildPipeline.BuildPlayer(options);
             var summary = report.summary;
-            Debug.Log($"WebGL build {summary.result}: {summary.totalSize / (1024f * 1024f):F1} MB in {summary.totalTime.TotalSeconds:F0} s, " +
+            Debug.Log($"WebGL build ({(profile != null ? profile.name : "no build profile")}) {summary.result}:{summary.totalSize / (1024f * 1024f):F1} MB in {summary.totalTime.TotalSeconds:F0} s, " +
                       $"{summary.totalErrors} errors, {summary.totalWarnings} warnings → {outputPath}");
             return report;
         }
