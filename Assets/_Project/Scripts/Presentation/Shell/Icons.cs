@@ -156,9 +156,10 @@ namespace StructureViewer.Presentation.Shell
         private static void Eye(Painter2D p)
         {
             p.BeginPath();
-            p.MoveTo(V(2, 12));
-            p.QuadraticCurveTo(V(12, 2), V(22, 12));
-            p.QuadraticCurveTo(V(12, 22), V(2, 12));
+            // Tips stay 3 units in: the joins at the sharp corners spill past the stroke half-width.
+            p.MoveTo(V(3, 12));
+            p.QuadraticCurveTo(V(12, 3), V(21, 12));
+            p.QuadraticCurveTo(V(12, 21), V(3, 12));
             p.ClosePath();
             p.Stroke();
             Circle(p, V(12, 12), 3.5f, fill: false);
