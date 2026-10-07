@@ -155,13 +155,15 @@ namespace StructureViewer.Presentation.Shell
 
         private static void Eye(Painter2D p)
         {
-            p.BeginPath();
-            // Tips stay 3 units in: the joins at the sharp corners spill past the stroke half-width.
-            p.MoveTo(V(3, 12));
-            p.QuadraticCurveTo(V(12, 3), V(21, 12));
-            p.QuadraticCurveTo(V(12, 21), V(3, 12));
-            p.ClosePath();
-            p.Stroke();
+            // Two open lids with round caps: a closed outline would need joins at the near-zero-angle corners,
+            // which Painter2D tessellates into spikes.
+            foreach (float lid in new[] { 5.5f, 18.5f })
+            {
+                p.BeginPath();
+                p.MoveTo(V(3, 12));
+                p.BezierCurveTo(V(6, lid), V(18, lid), V(21, 12));
+                p.Stroke();
+            }
             Circle(p, V(12, 12), 3.5f, fill: false);
         }
 

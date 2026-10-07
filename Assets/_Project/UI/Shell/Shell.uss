@@ -123,9 +123,15 @@
     background-color: var(--color-accent-pressed);
 }
 
+/* Buttons holding a vector icon: Button lays children out top-left unless told otherwise. */
+.sv-toolbar__overflow,
+.sv-slot-toggle {
+    align-items: center;
+    justify-content: center;
+}
+
 .sv-toolbar__overflow {
     flex-shrink: 0;
-    font-size: var(--font-size-l);
 }
 
 /* Body: side slots around the 3D view */
