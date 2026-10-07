@@ -23,6 +23,7 @@
 - **Sample house v2 (user request)**: American colonial/farmhouse (`SampleHouseSpec`: 12 × 8.4 m, 35° roof, symmetric front, `PorchBuilder` porch, gable sheathing). ~700 members, 85 panels.
 - **Realistic colours (user feedback: "all orange")**: panel tone per type (`DisplayPaletteAsset.RealisticPanelFor`): walls white house wrap, roofs charcoal, floors OSB, doors red, glazing pale blue.
 - **Doors and windows (user feedback: "no doors yet")**: `OpeningFillBuilder` (generator) fills every framed opening with a `Door` leaf or `Window` glazing panel, centred in the wall depth, in the wall's group. New `ElementCategory.Opening` → "Doors & windows" layer, gold family in Color by.
+- **Performance pass (2026-10-07)**: editor stats 83 draw calls, 5 SetPass, ~12k triangles, GPU 4.4 ms on Iris Xe. HDR turned off in `PC_RPAsset` (post-processing is off, so the float target bought nothing). On-demand rendering (`OnDemandRendering.renderFrameInterval` when idle) was considered and skipped: WebGL still runs the player loop every frame, the saving is only idle GPU heat/battery that a few-minute demo never shows, and a missed wake-up signal would be visible. `targetFrameRate` is never set on WebGL (it swaps `requestAnimationFrame` for `setTimeout`).
 - **Label declutter**: `LabelDeclutter` (Domain) hides labels overlapping a higher-priority one (selected first, then nearest), allocation-free, run every frame by `LabelsView` with each label's last measured size.
 
 ## Stretch (only if ahead)
