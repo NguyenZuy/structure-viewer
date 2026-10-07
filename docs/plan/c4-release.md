@@ -19,6 +19,8 @@ First release build: **10.8 MB** download (Brotli), 26 min build (Master + DiskS
 
 Changes for the next build: splash screen off, managed stripping Low → High (release only; DTOs kept by `Infrastructure/Parsing/link.xml`), normal maps and concrete albedo at 512 px (`AssetSetup.DetailTextureSize`), post-processing data removed from both renderers. Unused packages were left: the linker already drops them.
 
+Second build: **8.3 MB** (−23%), 12 min. `wasm` 5.34 MB, metadata 1.28 MB, assets 1.53 MB, engine resources 0.15 MB. Code is now ~80% of the download and High is the strongest stripping level; what remains is mostly UI Toolkit, URP and the Input System.
+
 ## Device matrix
 | Feature | Chrome (Win) | Firefox (Win) | Edge (Win) | Android Chrome | iOS Safari |
 |---|---|---|---|---|---|
