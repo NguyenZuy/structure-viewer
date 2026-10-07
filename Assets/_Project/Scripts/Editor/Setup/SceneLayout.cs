@@ -1,8 +1,14 @@
-using StructureViewer.Presentation.Contracts;
+using StructureViewer.Bootstrap;
+using StructureViewer.Presentation.CameraControl;
+using StructureViewer.Presentation.Input;
+using StructureViewer.Presentation.Shell;
+using StructureViewer.Presentation.Structure;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 namespace StructureViewer.Editor.Setup
 {
@@ -13,6 +19,8 @@ namespace StructureViewer.Editor.Setup
         public const string CameraName = "Main Camera";
         public const string LightName = "Directional Light";
         public const string GridName = "Ground Grid";
+        public const string StructureName = "Structure";
+        public const string ShellName = "Shell";
         public const string AppName = "App";
 
         // Post-processing is off on every platform (CLAUDE.md › PC + mobile), so the template volume only costs a lookup.
@@ -24,15 +32,30 @@ namespace StructureViewer.Editor.Setup
         private static readonly Color AmbientGround = new Color(0.52f, 0.50f, 0.47f);
         private static readonly Color Sun = new Color(1f, 0.96f, 0.9f);
 
-        public static void Configure(Scene scene, RenderingConfig config)
+        public static void Configure(Scene scene, SceneAssets assets)
         {
             var roots = scene.GetRootGameObjects();
             DestroyRoot(roots, LegacyVolumeName);
 
-            ConfigureCamera(FindOrCreateRoot(roots, CameraName));
+            var camera = ConfigureCamera(FindOrCreateRoot(roots, CameraName));
             ConfigureLight(FindOrCreateRoot(roots, LightName));
-            ConfigureGrid(roots, config.Grid);
-            ResetTransform(FindOrCreateRoot(roots, AppName).transform);
+            ConfigureGrid(roots, assets.Rendering.Grid);
+
+            var structure = FindOrCreateRoot(roots, StructureName);
+            ResetTransform(structure.transform);
+            var renderer = GetOrAdd<StructureRenderer>(structure);
+
+            var shellObject = FindOrCreateRoot(roots, ShellName);
+            var document = GetOrAdd<UIDocument>(shellObject);
+            document.panelSettings = assets.PanelSettings;
+            document.visualTreeAsset = assets.ShellLayout;
+            var shell = GetOrAdd<ShellView>(shellObject);
+
+            var app = FindOrCreateRoot(roots, AppName);
+            ResetTransform(app.transform);
+            var pointer = GetOrAdd<PointerInput>(app);
+            pointer.Ui = document;
+            WireBootstrap(GetOrAdd<AppBootstrap>(app), assets, renderer, camera, pointer, shell);
 
             RenderSettings.ambientMode = AmbientMode.Trilight;
             RenderSettings.ambientSkyColor = AmbientSky;
@@ -44,7 +67,7 @@ namespace StructureViewer.Editor.Setup
             RenderSettings.fog = false;
         }
 
-        private static void ConfigureCamera(GameObject go)
+        private static CameraController ConfigureCamera(GameObject go)
         {
             go.tag = "MainCamera";
             go.transform.SetPositionAndRotation(new Vector3(14f, 10f, -14f), Quaternion.Euler(28f, -45f, 0f));
@@ -59,6 +82,21 @@ namespace StructureViewer.Editor.Setup
             data.renderPostProcessing = false;
             data.renderShadows = false;
             data.antialiasing = AntialiasingMode.None;
+
+            return GetOrAdd<CameraController>(go);
+        }
+
+        private static void WireBootstrap(AppBootstrap bootstrap, SceneAssets assets, StructureRenderer renderer,
+            CameraController camera, PointerInput pointer, ShellView shell)
+        {
+            var so = new SerializedObject(bootstrap);
+            so.FindProperty("_structureJson").objectReferenceValue = assets.Structure;
+            so.FindProperty("_rendering").objectReferenceValue = assets.Rendering;
+            so.FindProperty("_renderer").objectReferenceValue = renderer;
+            so.FindProperty("_camera").objectReferenceValue = camera;
+            so.FindProperty("_pointer").objectReferenceValue = pointer;
+            so.FindProperty("_shell").objectReferenceValue = shell;
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static void ConfigureLight(GameObject go)

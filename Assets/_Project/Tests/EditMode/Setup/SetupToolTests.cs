@@ -1,6 +1,8 @@
 using System.Linq;
 using NUnit.Framework;
+using StructureViewer.Bootstrap;
 using StructureViewer.Editor.Setup;
+using StructureViewer.Presentation.Input;
 using StructureViewer.Presentation.Contracts;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -26,7 +28,12 @@ namespace StructureViewer.Tests.EditMode.Setup
         }
 
         [TearDown]
-        public void TearDown() => AssetDatabase.DeleteAsset(_root);
+        public void TearDown()
+        {
+            // Close any scene saved under _root before deleting it.
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            AssetDatabase.DeleteAsset(_root);
+        }
 
         [Test]
         public void AssetSetup_RunTwice_CreatesNoExtraAssets()
@@ -68,27 +75,51 @@ namespace StructureViewer.Tests.EditMode.Setup
         [Test]
         public void SceneLayout_ConfigureTwice_SameObjectsAndComponents()
         {
-            var config = AssetSetup.Run(_paths);
+            var assets = LoadSceneAssets();
 
-            SceneLayout.Configure(_scene, config);
+            SceneLayout.Configure(_scene, assets);
             var first = Snapshot();
-            SceneLayout.Configure(_scene, config);
+            SceneLayout.Configure(_scene, assets);
 
             CollectionAssert.AreEqual(first, Snapshot());
             CollectionAssert.IsSupersetOf(first.Select(s => s.Split(':')[0]).ToArray(),
-                new[] { SceneLayout.CameraName, SceneLayout.LightName, SceneLayout.GridName, SceneLayout.AppName });
+                new[] { SceneLayout.CameraName, SceneLayout.LightName, SceneLayout.GridName, SceneLayout.StructureName, SceneLayout.ShellName, SceneLayout.AppName });
         }
 
         [Test]
         public void SceneLayout_Configure_GridHasNoColliderAndLightHasNoShadows()
         {
-            SceneLayout.Configure(_scene, AssetSetup.Run(_paths));
+            SceneLayout.Configure(_scene, LoadSceneAssets());
 
             var roots = _scene.GetRootGameObjects();
             var grid = roots.Single(go => go.name == SceneLayout.GridName);
             var light = roots.Single(go => go.name == SceneLayout.LightName).GetComponent<Light>();
             Assert.IsNull(grid.GetComponent<Collider>());
             Assert.AreEqual(LightShadows.None, light.shadows);
+        }
+
+        // Regression: the menu opened the scene after loading RenderingConfig, the open unloaded it and _rendering was saved as null.
+        [Test]
+        public void SetupSceneMenuApply_SavedScene_WiresEveryBootstrapReference()
+        {
+            string scenePath = $"{_root}/Main.unity";
+            AssetSetup.EnsureFolder(_root);
+            EditorSceneManager.SaveScene(_scene, scenePath);
+
+            SetupSceneMenu.Apply(_paths, scenePath);
+
+            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+            var app = scene.GetRootGameObjects().Single(go => go.name == SceneLayout.AppName);
+            var so = new SerializedObject(app.GetComponent<AppBootstrap>());
+            foreach (var field in new[] { "_structureJson", "_rendering", "_renderer", "_camera", "_pointer", "_shell" })
+                Assert.IsNotNull(so.FindProperty(field).objectReferenceValue, field);
+            Assert.IsNotNull(app.GetComponent<PointerInput>().Ui);
+        }
+
+        private SceneAssets LoadSceneAssets()
+        {
+            AssetSetup.Run(_paths);
+            return SceneAssets.Load(_paths);
         }
 
         private string[] Snapshot() =>

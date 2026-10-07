@@ -9,6 +9,8 @@ namespace StructureViewer.Editor.Setup
         public const string ConcreteNormal = "Assets/_Project/Art/Textures/Concrete034_Normal.jpg";
         public const string Theme = "Assets/_Project/UI/RuntimeTheme.tss";
         public const string MainScene = "Assets/_Project/Scenes/Main.unity";
+        public const string ShellLayout = "Assets/_Project/UI/Shell/MainLayout.uxml";
+        public const string SampleStructure = "Assets/_Project/Data/sample-house.json";
 
         public static readonly SetupPaths Project = new SetupPaths(
             "Assets/_Project/Materials",
