@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="InfoPanel.uss" />
+    <ui:VisualElement name="info-root" class="sv-info">
+        <ui:Label name="info-empty" class="sv-info__empty" text="Tap a member to see details" />
+        <ui:ScrollView name="info-content" class="sv-info__content">
+            <ui:VisualElement name="info-header" class="sv-info__header">
+                <ui:Label name="info-title" class="sv-info__title" />
+                <ui:Label name="info-subtitle" class="sv-info__subtitle" />
+            </ui:VisualElement>
+            <ui:VisualElement name="info-rows" class="sv-info__rows" />
+            <ui:Label name="info-breakdown-title" class="sv-info__section-title" text="By type" />
+            <ui:VisualElement name="info-breakdown" class="sv-info__rows" />
+            <ui:VisualElement name="info-actions" class="sv-info__actions">
+                <ui:Button name="info-select-assembly" class="sv-info__button" text="Select assembly" />
+                <ui:Button name="info-isolate-assembly" class="sv-info__button" text="Isolate assembly" />
+                <ui:Button name="info-clear" class="sv-info__button" text="Clear" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

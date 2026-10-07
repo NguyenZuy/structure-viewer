@@ -1,0 +1,106 @@
+@import url("../Theme.uss");
+
+/* The instantiated template root, so the panel fills its slot or sheet. */
+.sv-info-host {
+    flex-grow: 1;
+}
+
+.sv-info {
+    flex-grow: 1;
+    min-width: 0;
+    padding: var(--space-m);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-m);
+}
+
+.sv-info__empty {
+    padding: var(--space-l) 0;
+    color: var(--color-text-muted);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.sv-info__content {
+    flex-grow: 1;
+}
+
+/* Left stripe matches the 3D highlight: orange member, blue assembly. */
+.sv-info__header {
+    padding-left: var(--space-s);
+    margin-bottom: var(--space-m);
+    border-left-width: 4px;
+    border-left-color: var(--color-border);
+}
+
+.sv-info--member .sv-info__header {
+    border-left-color: var(--color-accent);
+}
+
+.sv-info--assembly .sv-info__header {
+    border-left-color: var(--color-assembly);
+}
+
+.sv-info__title {
+    font-size: var(--font-size-l);
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.sv-info__subtitle {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-s);
+}
+
+.sv-info__section-title {
+    margin-top: var(--space-m);
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-s);
+    -unity-font-style: bold;
+}
+
+.sv-info__row {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-xs) 0;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-border);
+}
+
+.sv-info__label {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    margin-right: var(--space-m);
+}
+
+.sv-info__value {
+    flex-shrink: 1;
+    white-space: normal;
+    -unity-text-align: upper-right;
+}
+
+.sv-info__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: var(--space-m);
+}
+
+.sv-info__button {
+    min-height: var(--touch-target);
+    margin: 0 var(--space-s) var(--space-s) 0;
+    padding: 0 var(--space-m);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.sv-info__button:hover {
+    border-color: var(--color-text-muted);
+}
+
+.sv-info__button:active {
+    background-color: var(--color-border);
+}
