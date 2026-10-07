@@ -21,16 +21,20 @@ namespace StructureViewer.Presentation.Display
             _palette = palette;
         }
 
-        // Highlights tint the textured look instead of replacing it, as in the reference.
+        // Highlights tint the textured look instead of replacing it, as in the reference. Panels (sheathing, doors, glazing)
+        // get a per-type tone (their template stays transparent; only the colour and alpha change).
         public Material Resolve(Element element, HighlightState state)
         {
             var config = _library.Config;
-            var template = element.Kind switch
+            if (element.Kind == ElementKind.Panel)
             {
-                ElementKind.Slab => config.Concrete,
-                ElementKind.Panel => config.Sheathing,
-                _ => config.Wood
-            };
+                var tone = _palette.RealisticPanelFor(element.Info.Type);
+                var color = state == HighlightState.None ? tone : Highlight(_palette, state);
+                color.a = tone.a;
+                return _library.Get(config.Sheathing, color);
+            }
+
+            var template = element.Kind == ElementKind.Slab ? config.Concrete : config.Wood;
             return state == HighlightState.None ? template : _library.Tint(template, Highlight(_palette, state));
         }
 

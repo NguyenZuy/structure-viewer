@@ -8,6 +8,7 @@ using StructureViewer.Application.Selection;
 using StructureViewer.Application.Visibility;
 using StructureViewer.Domain.Display;
 using StructureViewer.Infrastructure.Parsing;
+using StructureViewer.Infrastructure.Preferences;
 using StructureViewer.Infrastructure.Quality;
 using StructureViewer.Presentation.CameraControl;
 using StructureViewer.Presentation.Contracts;
@@ -17,11 +18,13 @@ using StructureViewer.Presentation.Input;
 using StructureViewer.Presentation.Labels;
 using StructureViewer.Presentation.Layers;
 using StructureViewer.Presentation.Measure;
+using StructureViewer.Presentation.Notices;
 using StructureViewer.Presentation.Shell;
 using StructureViewer.Presentation.Structure;
 using StructureViewer.Presentation.Takeoff;
 using StructureViewer.Presentation.Viewport;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace StructureViewer.Bootstrap
@@ -109,6 +112,16 @@ namespace StructureViewer.Bootstrap
             Actions.RegisterToolbar();
             _shortcuts.Triggered += Actions.Execute;
 
+            var hint = new NoticeView("onboarding-hint");
+            var everythingHidden = new NoticeView("everything-hidden");
+            _shell.AddViewportOverlay(hint.Root);
+            _shell.AddViewportOverlay(everythingHidden.Root);
+            Own(new OnboardingPresenter(hint, new PlayerPrefsOnboardingStore(), _pointer, GuessPointerDevice()));
+            Own(new EverythingHiddenPresenter(everythingHidden, _renderer, Actions.ShowAll, Bus));
+#if DEVELOPMENT_BUILD
+            _shell.AddViewportOverlay(gameObject.AddComponent<Presentation.Diagnostics.FpsCounter>().Overlay);
+#endif
+
             // Cross-feature reactions.
             Own(Bus.Subscribe<StructureLoaded>(_ => history.Clear()));
             Own(Bus.Subscribe<VisibilityChanged>(evt => Selection.RemoveWhere(i => !evt.Visibility.IsVisible(i))));
@@ -120,6 +133,10 @@ namespace StructureViewer.Bootstrap
 
             Load(_structureJson);
         }
+
+        // Before any input: phones and tablets start with touch wording, everything else with mouse wording.
+        private static PointerDevice GuessPointerDevice() =>
+            UnityEngine.Application.isMobilePlatform && Touchscreen.current != null ? PointerDevice.Touch : PointerDevice.Mouse;
 
         // A scene from an older setup misses newer references; say how to fix it instead of failing with a NullReferenceException.
         private bool HasAllReferences()

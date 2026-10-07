@@ -16,14 +16,26 @@ namespace StructureViewer.Presentation.Display
         [SerializeField] private Color _assemblyHighlight = Hex("#3D8BFF");
         [SerializeField] private Color _hover = Hex("#FFE7A3");
 
+        [Header("Realistic")]
+        [Tooltip("Sheathing in Realistic, mostly opaque so the house reads as enclosed while the frame still shows through. " +
+                 "Walls: white house wrap. Roofs: charcoal shingle tone. Floors and anything else: OSB.")]
+        [SerializeField] private Color _realisticWallSheathing = Hex("#ECEAE4", 0.9f);
+        [SerializeField] private Color _realisticRoofSheathing = Hex("#41464D", 0.95f);
+        [SerializeField] private Color _realisticSheathing = Hex("#C9A46A", 0.85f);
+        [Tooltip("Door leaves: painted colonial red, opaque.")]
+        [SerializeField] private Color _realisticDoor = Hex("#7B2D26");
+        [Tooltip("Window glazing: pale blue, see-through.")]
+        [SerializeField] private Color _realisticGlass = Hex("#A9C8DA", 0.4f);
+
         [Header("Color by")]
-        [Tooltip("Indexed by ElementCategory: Wall, Floor, Roof, Sheathing, Slab.")]
+        [Tooltip("Indexed by ElementCategory: Wall, Floor, Roof, Sheathing, Slab, Opening.")]
         [SerializeField] private Color[] _categoryColors =
         {
-            Hex("#5B8DA8"), Hex("#5FA35A"), Hex("#B5475A"), Hex("#8E6CC9"), Hex("#9A9A9A")
+            Hex("#5B8DA8"), Hex("#5FA35A"), Hex("#B5475A"), Hex("#8E6CC9"), Hex("#9A9A9A"), Hex("#C9A227")
         };
 
-        // Families: walls steel blues/teals, floors greens, roof reds/pinks, sheathing violets. Unknown types use their category colour.
+        // Families: walls steel blues/teals, floors greens, roof reds/pinks, sheathing violets, openings golds.
+        // Unknown types use their category colour.
         [SerializeField] private TypeEntry[] _typeColors =
         {
             new TypeEntry("Stud", Hex("#4F86A6")),
@@ -42,6 +54,9 @@ namespace StructureViewer.Presentation.Display
             new TypeEntry("TrussWeb", Hex("#D98A97")),
             new TypeEntry("RoofSheathing", Hex("#8E6CC9")),
             new TypeEntry("WallSheathing", Hex("#B39DDB")),
+            new TypeEntry("FloorSheathing", Hex("#6A4FA3")),
+            new TypeEntry("Door", Hex("#A67C1A")),
+            new TypeEntry("Window", Hex("#E3CF7A")),
             new TypeEntry("Slab", Hex("#9A9A9A"))
         };
 
@@ -68,6 +83,22 @@ namespace StructureViewer.Presentation.Display
         public Color MemberHighlight => _memberHighlight;
         public Color AssemblyHighlight => _assemblyHighlight;
         public Color Hover => _hover;
+        public Color RealisticSheathing => _realisticSheathing;
+        public Color RealisticWallSheathing => _realisticWallSheathing;
+        public Color RealisticRoofSheathing => _realisticRoofSheathing;
+        public Color RealisticDoor => _realisticDoor;
+        public Color RealisticGlass => _realisticGlass;
+
+        // The Realistic tone for a panel type; contrast between walls, roof, doors and the wooden frame keeps the house readable.
+        public Color RealisticPanelFor(string type) =>
+            type switch
+            {
+                "WallSheathing" => _realisticWallSheathing,
+                "RoofSheathing" => _realisticRoofSheathing,
+                "Door" => _realisticDoor,
+                "Window" => _realisticGlass,
+                _ => _realisticSheathing
+            };
         public float ColorByPanelAlpha => _colorByPanelAlpha;
         public Color XRay => _xRay;
         public float XRayMemberAlpha => _xRayMemberAlpha;
@@ -106,10 +137,10 @@ namespace StructureViewer.Presentation.Display
         private void OnValidate() => _typeLookup = null;
 
         // Plain C# on purpose: field initialisers run in the constructor, where Unity APIs are not allowed.
-        private static Color Hex(string html)
+        private static Color Hex(string html, float alpha = 1f)
         {
             uint rgb = Convert.ToUInt32(html.Substring(1), 16);
-            return new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f, 1f);
+            return new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f, alpha);
         }
 
         [Serializable]

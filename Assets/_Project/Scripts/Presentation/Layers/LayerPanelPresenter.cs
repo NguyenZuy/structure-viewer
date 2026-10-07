@@ -107,6 +107,7 @@ namespace StructureViewer.Presentation.Layers
             {
                 ElementCategory.Wall => "Walls",
                 ElementCategory.Floor => "Floors",
+                ElementCategory.Opening => "Doors & windows",
                 _ => category.ToString()
             };
     }

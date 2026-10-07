@@ -16,6 +16,10 @@ namespace StructureViewer.Presentation.Structure
         private const int MaxPickHits = 32;
         private const float MaxPickDistance = 1000f;
 
+        // How far behind a sheathing hit a member still wins the pick (metres): covers sheathing + stud depth,
+        // so clicking a wall over a stud picks the stud and clicking between studs picks the sheathing.
+        private const float PanelPickDepth = 0.3f;
+
         [SerializeField] private Camera _camera;
 
         private readonly Dictionary<long, MeshData> _boxCache = new Dictionary<long, MeshData>();
@@ -153,17 +157,31 @@ namespace StructureViewer.Presentation.Structure
             var ray = _camera.ScreenPointToRay(screenPosition);
             int count = Physics.RaycastNonAlloc(ray, _hits, MaxPickDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
             float best = float.MaxValue;
-            bool found = false;
+            float bestSolid = float.MaxValue;
+            PickHit solid = default;
             for (int i = 0; i < count; i++)
             {
                 // Only our own pick colliders count; anything else in the scene is ignored.
-                if (_hits[i].distance >= best || !_hits[i].collider.TryGetComponent(out ElementHandle handle) || handle.Owner != this)
+                if (!_hits[i].collider.TryGetComponent(out ElementHandle handle) || handle.Owner != this)
                     continue;
-                best = _hits[i].distance;
-                hit = new PickHit(handle.Index, _hits[i].point);
-                found = true;
+                float distance = _hits[i].distance;
+                var candidate = new PickHit(handle.Index, _hits[i].point);
+                if (distance < best)
+                {
+                    best = distance;
+                    hit = candidate;
+                }
+                if (_model.Elements[handle.Index].Kind != ElementKind.Panel && distance < bestSolid)
+                {
+                    bestSolid = distance;
+                    solid = candidate;
+                }
             }
-            return found;
+
+            // Sheathing is see-through: a click on it means the member just behind (a wall's studs, a roof's chords).
+            if (best < float.MaxValue && bestSolid - best <= PanelPickDepth)
+                hit = solid;
+            return best < float.MaxValue;
         }
 
         // Applies pending visibility/material changes now instead of waiting for LateUpdate.

@@ -28,11 +28,14 @@ Visual reference: timber framing plugins / framing previews — real wood-grain 
 
 Sample data is a hypothetical two-storey timber house produced by an editor generator (`Tools > Structure Viewer > Generate Sample House`). It is not engineered or code-compliant — say so in the README.
 
-Sample house:
-- ~10 × 8 m footprint, two storeys (2.7 m each), **gable roof** (identical common trusses @ 600 mm, ~22.5° pitch) with roof sheathing on both slopes.
-- Concrete slab, external walls on both levels, one internal wall per level, first-floor joists on a bearer.
-- **Fixed openings**: front door + a few windows per level. Each opening has a lintel, trimmer studs either side and a sill (windows), with cripple studs above/below.
-- Studs @ 600 mm, noggings mid-height, top + bottom plates. Target ~500–800 members.
+Sample house (American colonial / farmhouse style, revised 2026-10-07):
+- 12 × 8.4 m footprint, two storeys (2.7 m each), **gable roof** (identical Fink trusses @ 600 mm, 35° pitch, 500 mm eaves, 400 mm gable overhang) with roof sheathing on both slopes.
+- Concrete slab, external walls on both levels, one internal wall per level (upstairs hall door), first-floor joists on a bearer.
+- **Symmetric front**: centred front door, two windows each side downstairs, five aligned windows upstairs; windows on the back and both sides of each storey, a back door. Each opening has a lintel, trimmer studs either side and a sill (windows), with cripple studs above/below.
+- **Covered front porch**: concrete pad, four posts and a beam, lean-to roof (15°) of rafters on a ledger fixed to the front wall, with its own sheathing.
+- **Envelope**: external wall sheathing on both storeys cut around every opening, closed gable ends, first-floor decking. Wall sheathing is grouped with its wall frame (selecting/isolating a wall includes it). Hide the `Sheathing` layer to see the bare frame.
+- **Doors and windows**: every opening is filled by a door leaf (40 mm) or a glazing pane (6 mm), centred in the wall depth and grouped with its wall. Category `Opening` ("Doors & windows" layer).
+- Studs @ 600 mm, noggings mid-height, top + bottom plates. ~700 members, ~85 panels, 2 slabs.
 
 Only this built-in sample is loaded — no user file loading. Stored as a `TextAsset` (`Assets/_Project/Data/sample-house.json`), parsed with `JsonUtility`. No `StreamingAssets`/web requests needed.
 
@@ -74,8 +77,8 @@ Only this built-in sample is loaded — no user file loading. Stored as a `TextA
 
 | Field | Notes |
 |---|---|
-| `category` | `Wall` / `Floor` / `Roof` / `Sheathing` / `Slab` — drives layer toggles. |
-| `type` | Display subtype: `Stud`, `TrimmerStud`, `CrippleStud`, `TopPlate`, `BottomPlate`, `Nogging`, `Lintel`, `Sill`, `Joist`, `Bearer`, `TrussTopChord`, `TrussBottomChord`, `TrussWeb`, `RoofSheathing`, `WallSheathing`. |
+| `category` | `Wall` / `Floor` / `Roof` / `Sheathing` / `Slab` / `Opening` — drives layer toggles. |
+| `type` | Display subtype: `Stud`, `TrimmerStud`, `CrippleStud`, `TopPlate`, `BottomPlate`, `Nogging`, `Lintel`, `Sill`, `Joist`, `Bearer`, `TrussTopChord`, `TrussBottomChord`, `TrussWeb`, `RoofSheathing`, `WallSheathing`, `FloorSheathing`, `Door`, `Window`. |
 | `group` | Assembly id (`W-N1`, `T03`) — used for assembly selection, isolate and labels. |
 | `start`/`end` | Member centreline endpoints, mm, Z-up. |
 | `roll` | Degrees around the member axis (optional, default 0). Two points alone don't fix the orientation of a rectangular section. |
@@ -153,7 +156,7 @@ Switch via the toolbar "Display" dropdown (mobile: overflow menu) or keys `1`–
 
 | Mode | Members | Slab | Sheathing | Selection highlight |
 |---|---|---|---|---|
-| **1. Realistic** | Wood albedo + normal (URP Lit) | Concrete texture | Translucent violet (α ≈ 0.35) | Member: wood tinted orange. Assembly: wood tinted blue |
+| **1. Realistic** | Wood albedo + normal (URP Lit) | Concrete texture | Per type, mostly opaque (α ≈ 0.9) so the house reads as enclosed with the frame faintly visible: walls white house wrap, roofs charcoal shingle tone, floors OSB. Doors opaque colonial red, glazing pale blue (α ≈ 0.4) | Member: wood tinted orange. Assembly: wood tinted blue |
 | **2. Color by** `Category` / `Type` / `Level` | Flat colour per key (URP Lit, low smoothness, no texture) | Colour of its key | Colour of its key, translucent (α ≈ 0.35) | Flat orange / blue |
 | **3. X-ray** | Translucent pale blue-grey (α ≈ 0.12, no depth write) | Same, α ≈ 0.08 | Same, α ≈ 0.08 | **Opaque** orange / blue, so the selection pops out of the ghosted model |
 | **4. Clay** | Matte off-white `#E8E6E1` | Slightly darker `#CFCBC4` | Translucent white (α ≈ 0.25) | Flat orange / blue |
@@ -171,7 +174,7 @@ Switch via the toolbar "Display" dropdown (mobile: overflow menu) or keys `1`–
 - X-ray uses many transparent objects → check overdraw/FPS on mobile; acceptable because all ghosted elements share one colour, so sort-order artefacts are invisible.
 
 ### 5. Assembly labels
-- One label per `group` at the assembly's top centre, screen-projected UI Toolkit labels. Hidden when the assembly is hidden or behind the camera; fade with distance; toggle in toolbar. Off by default on mobile.
+- One label per `group` at the assembly's top centre, screen-projected UI Toolkit labels. Hidden when the assembly is hidden or behind the camera; fade with distance; overlapping labels are decluttered every frame (nearer and selected ones win); toggle in toolbar. Off by default on mobile.
 
 ### 6. Measure
 - Toggle with `M` or toolbar. Click/tap point A, then point B → line + label with distance (mm) and |dx|, |dy|, |dz|.

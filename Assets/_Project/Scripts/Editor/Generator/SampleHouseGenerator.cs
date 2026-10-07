@@ -21,6 +21,9 @@ namespace StructureViewer.Editor.Generator
             FloorFrameBuilder.Build(spec, sink);
             TrussBuilder.Build(spec, sink);
             RoofSheathing(spec, sink);
+            EnvelopeBuilder.Build(spec, sink);
+            OpeningFillBuilder.Build(spec, sink);
+            PorchBuilder.Build(spec, sink);
 
             var levels = new[]
             {

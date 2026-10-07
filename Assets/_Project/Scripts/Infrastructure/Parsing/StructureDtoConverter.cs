@@ -24,7 +24,8 @@ namespace StructureViewer.Infrastructure.Parsing
             { "Floor", ElementCategory.Floor },
             { "Roof", ElementCategory.Roof },
             { "Sheathing", ElementCategory.Sheathing },
-            { "Slab", ElementCategory.Slab }
+            { "Slab", ElementCategory.Slab },
+            { "Opening", ElementCategory.Opening }
         };
 
         public static ParseResult Convert(StructureDto dto)

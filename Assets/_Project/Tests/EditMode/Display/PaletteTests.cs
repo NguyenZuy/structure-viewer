@@ -46,12 +46,44 @@ namespace StructureViewer.Tests.EditMode.Display
 
             Assert.AreSame(_config.Wood, realistic.Resolve(stud, HighlightState.None));
             Assert.AreSame(_config.Concrete, realistic.Resolve(ById(TestStructures.SlabId), HighlightState.None));
-            Assert.AreSame(_config.Sheathing, realistic.Resolve(ById(TestStructures.RoofPanelId), HighlightState.None));
 
             var member = realistic.Resolve(stud, HighlightState.Member);
             Assert.AreNotSame(_config.Wood, member);
             Assert.AreSame(_config.Wood.mainTexture, member.mainTexture);
             Assert.AreNotSame(member, realistic.Resolve(stud, HighlightState.Assembly));
+        }
+
+        [Test]
+        public void Realistic_Sheathing_IsTranslucentPerTypeToneAndKeepsItsAlphaWhenHighlighted()
+        {
+            var realistic = new RealisticPalette(_library, _palette);
+            var panel = ById(TestStructures.RoofPanelId);
+
+            var normal = realistic.Resolve(panel, HighlightState.None);
+            var selected = realistic.Resolve(panel, HighlightState.Assembly);
+
+            Assert.IsFalse(IsOpaque(normal));
+            Assert.AreEqual(_palette.RealisticRoofSheathing, normal.GetColor("_BaseColor"));
+            Assert.AreEqual(_palette.RealisticRoofSheathing.a, selected.GetColor("_BaseColor").a, 1e-5f);
+            Assert.AreNotSame(normal, selected);
+        }
+
+        [Test]
+        public void Realistic_PanelTone_DependsOnType()
+        {
+            Assert.AreEqual(_palette.RealisticWallSheathing, _palette.RealisticPanelFor("WallSheathing"));
+            Assert.AreEqual(_palette.RealisticRoofSheathing, _palette.RealisticPanelFor("RoofSheathing"));
+            Assert.AreEqual(_palette.RealisticSheathing, _palette.RealisticPanelFor("FloorSheathing"));
+            Assert.AreEqual(_palette.RealisticDoor, _palette.RealisticPanelFor("Door"));
+            Assert.AreEqual(_palette.RealisticGlass, _palette.RealisticPanelFor("Window"));
+            Assert.AreNotEqual(_palette.RealisticWallSheathing, _palette.RealisticRoofSheathing);
+        }
+
+        [Test]
+        public void Realistic_Glazing_IsSeeThrough_DoorIsSolid()
+        {
+            Assert.Less(_palette.RealisticGlass.a, 0.6f);
+            Assert.AreEqual(1f, _palette.RealisticDoor.a);
         }
 
         [Test]

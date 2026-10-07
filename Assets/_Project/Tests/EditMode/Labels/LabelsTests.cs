@@ -53,6 +53,39 @@ namespace StructureViewer.Tests.EditMode.Labels
         }
 
         [Test]
+        public void Declutter_OverlappingLabel_LowerPriorityIsHidden()
+        {
+            var rects = new[] { new Rect(0f, 0f, 40f, 16f), new Rect(30f, 4f, 40f, 16f), new Rect(200f, 0f, 40f, 16f) };
+            var keep = new[] { true, true, true };
+
+            LabelDeclutter.Apply(rects, new[] { 1, 0, 2 }, keep, 2f);
+
+            CollectionAssert.AreEqual(new[] { false, true, true }, keep);
+        }
+
+        [Test]
+        public void Declutter_HiddenLabelsNeverBlockOthers()
+        {
+            var rects = new[] { new Rect(0f, 0f, 40f, 16f), new Rect(10f, 0f, 40f, 16f) };
+            var keep = new[] { false, true };
+
+            LabelDeclutter.Apply(rects, new[] { 0, 1 }, keep, 2f);
+
+            Assert.IsTrue(keep[1]);
+        }
+
+        [Test]
+        public void SortByKey_OrdersIndicesBySmallestKeyFirst()
+        {
+            var order = new[] { 0, 1, 2, 3 };
+            var key = new[] { 5f, float.MinValue, 2f, 9f };
+
+            LabelDeclutter.SortByKey(order, key, order.Length);
+
+            CollectionAssert.AreEqual(new[] { 1, 2, 0, 3 }, order);
+        }
+
+        [Test]
         public void Presenter_Load_ShowsAnchorsWithFadeFromModelSize()
         {
             var (bus, view, presenter) = Create();

@@ -153,6 +153,17 @@ namespace StructureViewer.Tests.EditMode.Parsing
         }
 
         [Test]
+        public void Convert_OpeningPanel_GetsOpeningCategory()
+        {
+            _dto.panels[0].category = "Opening";
+            _dto.panels[0].type = "Door";
+
+            var model = StructureDtoConverter.Convert(_dto).Model;
+
+            Assert.AreEqual(ElementCategory.Opening, model.Elements[model.IndexOf("RS-N")].Info.Category);
+        }
+
+        [Test]
         public void Convert_UnknownCategory_Fails()
         {
             _dto.panels[0].category = "Door";

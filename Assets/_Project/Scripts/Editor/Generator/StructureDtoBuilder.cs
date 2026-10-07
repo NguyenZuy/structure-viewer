@@ -31,12 +31,15 @@ namespace StructureViewer.Editor.Generator
             });
         }
 
-        public void Panel(string id, string type, string group, string level, float thickness, params Vector3[] corners)
+        public void Panel(string id, string type, string group, string level, float thickness, params Vector3[] corners) =>
+            Panel(id, "Sheathing", type, group, level, thickness, corners);
+
+        public void Panel(string id, string category, string type, string group, string level, float thickness, Vector3[] corners)
         {
             var flat = new float[corners.Length * 3];
             for (int i = 0; i < corners.Length; i++)
                 Point(corners[i]).CopyTo(flat, i * 3);
-            _panels.Add(new PanelDto { id = id, category = "Sheathing", type = type, group = group, level = level, corners = flat, thickness = thickness });
+            _panels.Add(new PanelDto { id = id, category = category, type = type, group = group, level = level, corners = flat, thickness = thickness });
         }
 
         public void Slab(string id, string level, float top, float thickness, params Vector2[] outline)

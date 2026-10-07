@@ -192,7 +192,9 @@
     border-left-color: var(--color-error);
 }
 
+/* The sheet lives in the overlay, outside .sv-shell, so it sets its own text colour. */
 .sv-sheet {
+    color: var(--color-text);
     position: absolute;
     bottom: 0;
     left: 50%;

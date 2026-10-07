@@ -6,6 +6,7 @@ namespace StructureViewer.Domain.Structure
         Floor,
         Roof,
         Sheathing,
-        Slab
+        Slab,
+        Opening
     }
 }

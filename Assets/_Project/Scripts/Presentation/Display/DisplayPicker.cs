@@ -2,6 +2,7 @@ using System;
 using StructureViewer.Application.Display;
 using StructureViewer.Application.Events;
 using StructureViewer.Domain.Display;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace StructureViewer.Presentation.Display
@@ -50,7 +51,11 @@ namespace StructureViewer.Presentation.Display
             }
 
             var caption = new Label("Color by");
-            caption.style.marginTop = 8;
+            caption.style.marginTop = 16;
+            caption.style.fontSize = 12;
+            caption.style.unityFontStyleAndWeight = FontStyle.Bold;
+            // Muted like other section titles (--color-text-muted); set inline because this view is built in code.
+            caption.style.color = new Color(0.604f, 0.612f, 0.639f);
             _fieldRow = new VisualElement();
             _fieldRow.Add(caption);
             var fieldButtons = Row();

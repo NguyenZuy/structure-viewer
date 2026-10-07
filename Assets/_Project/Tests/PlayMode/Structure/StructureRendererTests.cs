@@ -71,6 +71,32 @@ namespace StructureViewer.Tests.PlayMode.Structure
         }
 
         [Test]
+        public void TryPick_SheathingOverAMember_PicksTheMember()
+        {
+            var chord = _model.Elements[_model.IndexOf(TestStructures.SlopedChordId)].Member;
+            var panel = _model.Elements[_model.IndexOf(TestStructures.RoofPanelId)].Panel;
+            // Straight down onto the chord's midpoint, through the roof panel that lies over it.
+            LookAt(chord.Midpoint, panel.Normal.y > 0f ? panel.Normal * 3f : -panel.Normal * 3f);
+
+            Assert.IsTrue(_renderer.TryPick(_camera.WorldToScreenPoint(chord.Midpoint), out var hit));
+            Assert.AreEqual(_model.IndexOf(TestStructures.SlopedChordId), hit.Index);
+        }
+
+        [Test]
+        public void TryPick_SheathingWithNothingBehind_PicksTheSheathing()
+        {
+            int panelIndex = _model.IndexOf(TestStructures.RoofPanelId);
+            var panel = _model.Elements[panelIndex].Panel;
+            // Between the two trusses (x 0.6 and 3.0), mid-slope.
+            var point = (panel.Corners[0] + panel.Corners[1] + panel.Corners[2] + panel.Corners[3]) * 0.25f;
+            point.x = 1.8f;
+            LookAt(point, panel.Normal.y > 0f ? panel.Normal * 3f : -panel.Normal * 3f);
+
+            Assert.IsTrue(_renderer.TryPick(_camera.WorldToScreenPoint(point), out var hit));
+            Assert.AreEqual(panelIndex, hit.Index);
+        }
+
+        [Test]
         public void TryPick_EmptySpace_ReturnsFalse()
         {
             LookAt(new Vector3(50f, 50f, 50f), new Vector3(0f, 0f, -4f));

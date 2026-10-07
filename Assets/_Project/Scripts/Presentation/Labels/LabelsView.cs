@@ -12,6 +12,10 @@ namespace StructureViewer.Presentation.Labels
         private static readonly Color Background = new Color(0.118f, 0.122f, 0.133f, 0.85f);
         private static readonly Color EmphasisBackground = new Color(0.239f, 0.545f, 1f, 0.95f);
 
+        // Label box sits LabelLift of its height above the anchor (see the translate in CreateLabel).
+        private const float LabelLift = 1.2f;
+        private const float CollisionPadding = 2f;
+
         private readonly List<Label> _pool = new List<Label>();
         private readonly List<bool> _shown = new List<bool>();
         private VisualElement _overlay;
@@ -21,6 +25,17 @@ namespace StructureViewer.Presentation.Labels
         private float _farFade;
         private int _emphasized = -1;
         private bool _enabled = true;
+
+        // Per-frame scratch, sized once per load: panel position, opacity, rect, priority key and order of each label.
+        private Vector2[] _position = System.Array.Empty<Vector2>();
+        private float[] _opacity = System.Array.Empty<float>();
+        private Rect[] _rects = System.Array.Empty<Rect>();
+        private float[] _priority = System.Array.Empty<float>();
+        private int[] _order = System.Array.Empty<int>();
+        private bool[] _keep = System.Array.Empty<bool>();
+
+        // Last measured size per label: a hidden label measures zero, which would let it pop back in and flicker.
+        private Vector2[] _size = System.Array.Empty<Vector2>();
 
         public Camera Camera { get; set; }
 
@@ -40,9 +55,20 @@ namespace StructureViewer.Presentation.Labels
             _anchors = anchors ?? System.Array.Empty<AssemblyAnchor>();
             _nearFade = nearFade;
             _farFade = farFade;
-            _groupVisible = new bool[_anchors.Count];
-            for (int i = 0; i < _groupVisible.Length; i++)
+            int count = _anchors.Count;
+            _groupVisible = new bool[count];
+            _position = new Vector2[count];
+            _opacity = new float[count];
+            _rects = new Rect[count];
+            _priority = new float[count];
+            _order = new int[count];
+            _keep = new bool[count];
+            _size = new Vector2[count];
+            for (int i = 0; i < count; i++)
+            {
                 _groupVisible[i] = true;
+                _order[i] = i;
+            }
 
             while (_pool.Count < _anchors.Count)
                 _pool.Add(CreateLabel());
@@ -81,26 +107,45 @@ namespace StructureViewer.Presentation.Labels
             if (!_enabled || Camera == null || _overlay?.panel == null)
                 return;
 
-            for (int i = 0; i < _anchors.Count; i++)
+            int count = _anchors.Count;
+            for (int i = 0; i < count; i++)
             {
                 var anchor = _anchors[i].Position;
                 var viewport = Camera.WorldToViewportPoint(anchor);
-                // The emphasised (selected) assembly never fades.
                 float opacity = LabelVisibilityRule.Opacity(_groupVisible[i], viewport, _nearFade, _farFade);
+                // The emphasised (selected) assembly never fades and always wins a collision.
                 if (opacity > 0f && i == _emphasized)
                     opacity = 1f;
-
-                Show(i, opacity > 0f);
-                if (opacity <= 0f)
+                _opacity[i] = opacity;
+                _keep[i] = opacity > 0f;
+                _priority[i] = i == _emphasized ? float.MinValue : viewport.z;
+                if (!_keep[i])
                     continue;
 
                 var screen = Camera.WorldToScreenPoint(anchor);
                 // Panel space has a top-left origin.
-                var panelPoint = RuntimePanelUtils.ScreenToPanel(_overlay.panel, new Vector2(screen.x, Screen.height - screen.y));
+                _position[i] = RuntimePanelUtils.ScreenToPanel(_overlay.panel, new Vector2(screen.x, Screen.height - screen.y));
+                var resolved = _pool[i].resolvedStyle;
+                if (resolved.width > 0f && resolved.height > 0f)
+                    _size[i] = new Vector2(resolved.width, resolved.height);
+                // Matches the translate in CreateLabel: centred horizontally, bottom edge above the anchor.
+                var size = _size[i];
+                _rects[i] = new Rect(_position[i].x - size.x * 0.5f, _position[i].y - size.y * LabelLift, size.x, size.y);
+            }
+
+            // Nearer labels first, so the ones in front stay readable.
+            LabelDeclutter.SortByKey(_order, _priority, count);
+            LabelDeclutter.Apply(_rects, _order, _keep, CollisionPadding);
+
+            for (int i = 0; i < count; i++)
+            {
+                Show(i, _keep[i]);
+                if (!_keep[i])
+                    continue;
                 var style = _pool[i].style;
-                style.left = panelPoint.x;
-                style.top = panelPoint.y;
-                style.opacity = opacity;
+                style.left = _position[i].x;
+                style.top = _position[i].y;
+                style.opacity = _opacity[i];
             }
         }
 
@@ -120,7 +165,7 @@ namespace StructureViewer.Presentation.Labels
             var style = label.style;
             style.position = Position.Absolute;
             // Centred above the anchor point.
-            style.translate = new Translate(Length.Percent(-50), new Length(-120, LengthUnit.Percent));
+            style.translate = new Translate(Length.Percent(-50), new Length(-LabelLift * 100f, LengthUnit.Percent));
             style.paddingLeft = 6;
             style.paddingRight = 6;
             style.paddingTop = 2;
