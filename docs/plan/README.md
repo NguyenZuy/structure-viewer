@@ -48,7 +48,7 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 | B13 | [Material takeoff](b13-takeoff.md) | 1 h | A2 | ☑ |
 | B14 | [Assembly labels](b14-labels.md) | 0.75 h | A2 | ☑ |
 | C1 | [Core viewer composition](c1-core-viewer.md) | 1 h | B01–B08 | ☑ (WebGL desktop/phone check pending) |
-| C2 | [Feature wiring & end-to-end tests](c2-feature-wiring.md) | 1.5 h | C1, B09–B14 | ☐ |
+| C2 | [Feature wiring & end-to-end tests](c2-feature-wiring.md) | 1.5 h | C1, B09–B14 | ☑ (phone checks pending, with C1) |
 | C3 | [Polish](c3-polish.md) | 1 h | C2 | ☐ |
 | C4 | [Release: build, devices, deploy, README](c4-release.md) | 2 h | C3 | ☐ |
 
