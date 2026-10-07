@@ -4,7 +4,7 @@ A browser-based viewer for timber-framed buildings: wall frames, floor joists, r
 
 **[▶ Live demo](https://www.zuyzuygames.com/structure-viewer/)** · Unity 6 · URP · WebGL 2 · UI Toolkit · no backend
 
-<!-- TODO: hero GIF (desktop) + short phone clip -->
+![Orbit, select a wall, isolate it, then X-ray, Color by and Clay](docs/media/demo.gif)
 
 ## Features
 
