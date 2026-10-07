@@ -45,8 +45,8 @@ Untested targets are marked as such in the README, not claimed.
 - [x] Host: Vercel, static site repo `my-brand-website`. Build copied to `structure-viewer/`, live at https://www.zuyzuygames.com/structure-viewer/ (2026-10-07). Decompression Fallback, no custom headers.
 - [x] Standalone page, not embedded (user decision): the WebGL template is a branded splash (progress, error help, Source / site links) and redirects `/structure-viewer` → `/structure-viewer/` so relative build paths resolve.
 - [x] Live check, desktop Chrome: loads, no console errors; build files download in ~0.8 s. Vercel serves `.unityweb` as `application/vnd.unity` without `Content-Encoding`, so the loader decompresses Brotli in JS.
-- [ ] Optional: `vercel.json` headers (`Content-Encoding: br`, `application/wasm`) for native decompression and streaming wasm compile.
-- [ ] Check on a phone over the live URL.
+- [x] `vercel.json` in the site repo serves the three `.unityweb` files with `Content-Encoding: br` and real content types (native decompression, streaming wasm compile). Verified: `curl --compressed` yields a valid wasm, the page loads without console errors.
+- [x] Phone over the live URL (Xiaomi 14T, Chrome 154, CDP via adb; mid/low = Chrome CPU + network throttling, GPU not throttled): high 2.5 s cold / 1.6 s cached / 60 FPS Realistic and X-ray; mid (CPU ÷2, 4G) 10.3 s / 2.5 s / 60 FPS; low (CPU ÷6, fast 3G) 45 s / 6.2 s / ~42–45 FPS. X-ray gate (≥ 30 FPS) holds.
 
 ## README
 - [ ] Hero GIF (desktop) + phone clip, live demo link.

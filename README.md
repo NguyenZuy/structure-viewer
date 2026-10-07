@@ -118,9 +118,16 @@ Unity -batchmode -projectPath . -runTests -testPlatform EditMode -testResults ./
 | Download | **8.3 MB** (Brotli): code 5.3 MB, IL2CPP metadata 1.3 MB, assets 1.5 MB | Release build |
 | Cold download, desktop | ~0.8 s for all build files on a fast connection | Chrome, live site |
 | Rendering | ~93 draw calls (71 via SRP Batcher), ~14k triangles, GPU ~4.3 ms/frame | Editor Stats, Intel Iris Xe laptop |
-| Phone | ~60 FPS (display cap) | Xiaomi 14T, Chrome, perf spike with 1,600 separate renderers, before mesh combining |
 
-<!-- TODO: FPS of the release build on a phone and a desktop browser. -->
+Live site on a Xiaomi 14T (Android 16, Chrome 154), driven over the DevTools protocol. Mid and low tiers throttle the CPU and network in Chrome; the GPU can't be throttled, so they model slower CPUs and connections, not weaker GPUs.
+
+| Tier | Cold load | Cached load | Realistic | X-ray |
+|---|---|---|---|---|
+| High: device as is | 2.5 s | 1.6 s | 60 FPS | 60 FPS |
+| Mid: CPU ÷2, 4G (9 Mbps, 85 ms) | 10.3 s | 2.5 s | 60 FPS | 60 FPS |
+| Low: CPU ÷6, fast 3G (1.6 Mbps, 150 ms) | 45 s | 6.2 s | ~42 FPS | ~45 FPS |
+
+Load time is download-bound on slow networks (8.3 MB); repeat visits come from the browser and IndexedDB caches. The build is served with `Content-Encoding: br` so the browser decompresses natively.
 
 Size work that got here from a first 10.8 MB build: managed stripping High, no splash screen, 512 px normal maps, no post-processing resources. Code (UI Toolkit, URP, Input System) is now ~80% of the download.
 
