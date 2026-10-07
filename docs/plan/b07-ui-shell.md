@@ -7,6 +7,7 @@
 ## Key decisions
 - UI Toolkit has no media queries: `ResponsiveLayout` toggles `.compact` on the root when width < 768 px; USS handles the rest.
 - Panels from other phases are plain `VisualElement`s; the shell only provides slots/sheets — it knows nothing about features.
+- Full-screen/layout containers use `PickingMode.Ignore`; only real controls and panels are pickable. `PointerInput` (B05) treats any pickable element under the pointer as UI and won't orbit/select through it.
 
 ## Tasks
 - [ ] `MainLayout.uxml` + `Shell.uss` (imports `Theme.uss`): top toolbar, left/right/bottom slots, sheet host, toast area.

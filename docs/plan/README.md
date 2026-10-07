@@ -37,7 +37,7 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 | B02 | [Sample house generator](b02-sample-generator.md) | 1.5 h | A2 | ☑ |
 | B03 | [Geometry & structure renderer](b03-structure-renderer.md) | 2.5 h | A2 | ☑ |
 | B04 | [Materials, textures & scene setup](b04-materials-setup.md) | 1 h | A2 | ☐ |
-| B05 | [Input gestures](b05-input-gestures.md) | 1 h | A2 | ☐ |
+| B05 | [Input gestures](b05-input-gestures.md) | 1 h | A2 | ☑ |
 | B06 | [Camera controller](b06-camera.md) | 1 h | A2 | ☐ |
 | B07 | [UI shell](b07-ui-shell.md) | 1.5 h | A2 | ☐ |
 | B08 | [WebGL build & perf spike](b08-webgl-perf-spike.md) | 1 h | A2 | ☑ (gate passed; mesh combining used anyway) |
