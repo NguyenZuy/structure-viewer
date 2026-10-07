@@ -85,6 +85,8 @@ namespace StructureViewer.Tests.EditMode.Display
             Assert.AreEqual(_palette.RealisticSheathing, _palette.RealisticPanelFor("FloorSheathing"));
             Assert.AreEqual(_palette.RealisticDoor, _palette.RealisticPanelFor("Door"));
             Assert.AreEqual(_palette.RealisticGlass, _palette.RealisticPanelFor("Window"));
+            Assert.AreEqual(_palette.RealisticTrim, _palette.RealisticPanelFor("Casing"));
+            Assert.AreEqual(_palette.RealisticTrim, _palette.RealisticPanelFor("Muntin"));
             Assert.AreNotEqual(_palette.RealisticWallSheathing, _palette.RealisticRoofSheathing);
         }
 

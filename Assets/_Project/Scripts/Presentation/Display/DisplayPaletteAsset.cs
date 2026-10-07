@@ -24,6 +24,8 @@ namespace StructureViewer.Presentation.Display
         [SerializeField] private Color _realisticSheathing = Hex("#C9A46A", 0.85f);
         [Tooltip("Door leaves: painted colonial red, opaque.")]
         [SerializeField] private Color _realisticDoor = Hex("#7B2D26");
+        [Tooltip("Window casings and muntins: white colonial trim, opaque.")]
+        [SerializeField] private Color _realisticTrim = Hex("#F2F0EA");
         [Tooltip("Window glazing: dark blue-grey, mostly opaque like real windows seen from outside; the glossy Glass template adds the sheen.")]
         [SerializeField] private Color _realisticGlass = Hex("#2F4654", 0.8f);
 
@@ -57,6 +59,8 @@ namespace StructureViewer.Presentation.Display
             new TypeEntry("FloorSheathing", Hex("#6A4FA3")),
             new TypeEntry("Door", Hex("#A67C1A")),
             new TypeEntry("Window", Hex("#E3CF7A")),
+            new TypeEntry("Casing", Hex("#7A5C12")),
+            new TypeEntry("Muntin", Hex("#D1B04A")),
             new TypeEntry("Slab", Hex("#9A9A9A"))
         };
 
@@ -88,6 +92,7 @@ namespace StructureViewer.Presentation.Display
         public Color RealisticRoofSheathing => _realisticRoofSheathing;
         public Color RealisticDoor => _realisticDoor;
         public Color RealisticGlass => _realisticGlass;
+        public Color RealisticTrim => _realisticTrim;
 
         // The Realistic tone for a panel type; contrast between walls, roof, doors and the wooden frame keeps the house readable.
         public Color RealisticPanelFor(string type) =>
@@ -97,6 +102,8 @@ namespace StructureViewer.Presentation.Display
                 "RoofSheathing" => _realisticRoofSheathing,
                 "Door" => _realisticDoor,
                 "Window" => _realisticGlass,
+                "Casing" => _realisticTrim,
+                "Muntin" => _realisticTrim,
                 _ => _realisticSheathing
             };
         public float ColorByPanelAlpha => _colorByPanelAlpha;

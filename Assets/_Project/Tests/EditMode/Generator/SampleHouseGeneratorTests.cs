@@ -327,7 +327,7 @@ namespace StructureViewer.Tests.EditMode.Generator
         [Test]
         public void Generate_EveryOpening_IsFilledByOneDoorOrWindow_InsideItsFrame()
         {
-            var fills = _dto.panels.Where(p => p.category == OpeningFillBuilder.Category).ToList();
+            var fills = _dto.panels.Where(p => p.type == OpeningFillBuilder.DoorType || p.type == OpeningFillBuilder.WindowType).ToList();
 
             Assert.AreEqual(_spec.Openings.Count, fills.Count);
             foreach (var wall in _walls)
@@ -358,7 +358,7 @@ namespace StructureViewer.Tests.EditMode.Generator
             foreach (var wall in _walls)
             {
                 var normal = new Vector2(wall.Direction.y, -wall.Direction.x);
-                foreach (var fill in _dto.panels.Where(p => p.group == wall.Id && p.category == OpeningFillBuilder.Category))
+                foreach (var fill in _dto.panels.Where(p => p.group == wall.Id && p.category == OpeningFillBuilder.Category && p.type != OpeningFillBuilder.CasingType))
                 {
                     var c = Corners(fill.corners).ToArray();
                     var extrusion = Vector3.Cross(c[1] - c[0], c[3] - c[0]).normalized;
@@ -367,6 +367,56 @@ namespace StructureViewer.Tests.EditMode.Generator
 
                     Assert.AreEqual(0f, back + front, 0.5f, $"{fill.id} is off-centre");
                     Assert.Less(Mathf.Abs(back), _spec.StudDepth * 0.5f, $"{fill.id} sticks out of the frame");
+                }
+            }
+        }
+
+        [Test]
+        public void Generate_EveryWindow_HasASixOverSixMuntinGridInsideTheOpening()
+        {
+            foreach (var wall in _walls)
+            {
+                var muntins = _dto.panels.Where(p => p.group == wall.Id && p.type == OpeningFillBuilder.MuntinType).ToList();
+                var windows = wall.Openings.Where(o => o.Kind == OpeningKind.Window).ToList();
+                int expected = windows.Sum(o => (o.Width >= 1100f ? 3 : 2) + 3);
+
+                Assert.AreEqual(expected, muntins.Count, wall.Id);
+                foreach (var muntin in muntins)
+                {
+                    var c = Corners(muntin.corners).ToArray();
+                    float u = c.Average(p => AlongWall(wall, p));
+                    float z = c.Average(p => p.z);
+                    Assert.IsTrue(windows.Any(o => u > o.Offset && u < o.End && z > wall.Base + o.Sill && z < wall.Base + o.Head),
+                        $"{muntin.id} is outside every window");
+                }
+            }
+        }
+
+        [Test]
+        public void Generate_ExternalOpenings_HaveCasingOnTheSheathingFacingOutward()
+        {
+            var centre = new Vector2(_spec.Length * 0.5f, _spec.Depth * 0.5f);
+            float face = _spec.StudDepth * 0.5f + _spec.SheathingThickness;
+            foreach (var wall in _walls)
+            {
+                var casings = _dto.panels.Where(p => p.group == wall.Id && p.type == OpeningFillBuilder.CasingType).ToList();
+                if (wall.Id.EndsWith("-I"))
+                {
+                    CollectionAssert.IsEmpty(casings, wall.Id);
+                    continue;
+                }
+
+                int expected = wall.Openings.Sum(o => o.Kind == OpeningKind.Door ? 3 : 4);
+                Assert.AreEqual(expected, casings.Count, wall.Id);
+                var mid = (wall.Start + wall.End) * 0.5f;
+                var outward = (new Vector2(wall.Direction.y, -wall.Direction.x) * Mathf.Sign(Vector2.Dot(new Vector2(wall.Direction.y, -wall.Direction.x), mid - centre))).normalized;
+                foreach (var casing in casings)
+                {
+                    var c = Corners(casing.corners).ToArray();
+                    var extrusion = Vector3.Cross(c[1] - c[0], c[3] - c[0]).normalized;
+                    Assert.Greater(Vector2.Dot(new Vector2(extrusion.x, extrusion.y), outward), 0.99f, $"{casing.id} faces inward");
+                    float depth = Vector2.Dot(new Vector2(c[0].x, c[0].y) - wall.Start, outward);
+                    Assert.AreEqual(face, depth, 0.5f, $"{casing.id} is not on the sheathing face");
                 }
             }
         }

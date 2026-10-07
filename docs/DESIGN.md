@@ -34,7 +34,7 @@ Sample house (American colonial / farmhouse style, revised 2026-10-07):
 - **Symmetric front**: centred front door, two windows each side downstairs, five aligned windows upstairs; windows on the back and both sides of each storey, a back door. Each opening has a lintel, trimmer studs either side and a sill (windows), with cripple studs above/below.
 - **Covered front porch**: concrete pad, four posts and a beam, lean-to roof (15°) of rafters on a ledger fixed to the front wall, with its own sheathing.
 - **Envelope**: external wall sheathing on both storeys cut around every opening, closed gable ends, first-floor decking. Wall sheathing is grouped with its wall frame (selecting/isolating a wall includes it). Hide the `Sheathing` layer to see the bare frame.
-- **Doors and windows**: every opening is filled by a door leaf (40 mm) or a glazing pane (6 mm), centred in the wall depth and grouped with its wall. Category `Opening` ("Doors & windows" layer).
+- **Doors and windows**: every opening is filled by a door leaf (40 mm) or a glazing pane (6 mm), centred in the wall depth and grouped with its wall. Windows have a colonial 6-over-6 muntin grid (3 or 4 columns, deeper meeting rail); every external opening has a 90 mm white casing on the sheathing. Category `Opening` ("Doors & windows" layer). ~1000 elements in total.
 - Studs @ 600 mm, noggings mid-height, top + bottom plates. ~700 members, ~85 panels, 2 slabs.
 
 Only this built-in sample is loaded — no user file loading. Stored as a `TextAsset` (`Assets/_Project/Data/sample-house.json`), parsed with `JsonUtility`. No `StreamingAssets`/web requests needed.
@@ -78,7 +78,7 @@ Only this built-in sample is loaded — no user file loading. Stored as a `TextA
 | Field | Notes |
 |---|---|
 | `category` | `Wall` / `Floor` / `Roof` / `Sheathing` / `Slab` / `Opening` — drives layer toggles. |
-| `type` | Display subtype: `Stud`, `TrimmerStud`, `CrippleStud`, `TopPlate`, `BottomPlate`, `Nogging`, `Lintel`, `Sill`, `Joist`, `Bearer`, `TrussTopChord`, `TrussBottomChord`, `TrussWeb`, `RoofSheathing`, `WallSheathing`, `FloorSheathing`, `Door`, `Window`. |
+| `type` | Display subtype: `Stud`, `TrimmerStud`, `CrippleStud`, `TopPlate`, `BottomPlate`, `Nogging`, `Lintel`, `Sill`, `Joist`, `Bearer`, `TrussTopChord`, `TrussBottomChord`, `TrussWeb`, `RoofSheathing`, `WallSheathing`, `FloorSheathing`, `Door`, `Window`, `Casing`, `Muntin`. |
 | `group` | Assembly id (`W-N1`, `T03`) — used for assembly selection, isolate and labels. |
 | `start`/`end` | Member centreline endpoints, mm, Z-up. |
 | `roll` | Degrees around the member axis (optional, default 0). Two points alone don't fix the orientation of a rectangular section. |
@@ -156,7 +156,7 @@ Switch via the toolbar "Display" dropdown (mobile: overflow menu) or keys `1`–
 
 | Mode | Members | Slab | Sheathing | Selection highlight |
 |---|---|---|---|---|
-| **1. Realistic** | Wood albedo + normal (URP Lit) | Concrete texture | Per type, mostly opaque (α ≈ 0.9) so the house reads as enclosed with the frame faintly visible: walls white house wrap, roofs charcoal shingle tone, floors OSB. Doors opaque colonial red; glazing dark blue-grey (α ≈ 0.8) on a glossy Glass template with preserved specular | Member: wood tinted orange. Assembly: wood tinted blue |
+| **1. Realistic** | Wood albedo + normal (URP Lit) | Concrete texture | Per type, mostly opaque (α ≈ 0.9) so the house reads as enclosed with the frame faintly visible: walls white house wrap, roofs charcoal shingle tone, floors OSB. Doors opaque colonial red, casings and muntins white trim; glazing dark blue-grey (α ≈ 0.8) on a glossy Glass template with preserved specular | Member: wood tinted orange. Assembly: wood tinted blue |
 | **2. Color by** `Category` / `Type` / `Level` | Flat colour per key (URP Lit, low smoothness, no texture) | Colour of its key | Colour of its key, translucent (α ≈ 0.35) | Flat orange / blue |
 | **3. X-ray** | Translucent pale blue-grey (α ≈ 0.12, no depth write) | Same, α ≈ 0.08 | Same, α ≈ 0.08 | **Opaque** orange / blue, so the selection pops out of the ghosted model |
 | **4. Clay** | Matte off-white `#E8E6E1` | Slightly darker `#CFCBC4` | Translucent white (α ≈ 0.25) | Flat orange / blue |
