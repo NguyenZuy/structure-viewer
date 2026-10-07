@@ -7,6 +7,18 @@
 - [ ] Full EditMode + PlayMode run from CLI — green before building.
 - [ ] Re-check Player settings (B08); non-development build via `Tools > Structure Viewer > Build WebGL`. Record build size.
 
+### Build size analysis (2026-10-07)
+First release build: **10.8 MB** download (Brotli), 26 min build (Master + DiskSizeLTO).
+
+| Part | Brotli | Raw | Notes |
+|---|---|---|---|
+| `wasm` | 5.8 MB | 21 MB | UI Toolkit, mscorlib, RP Core, Input System, URP dominate; our code ~150 KB IL |
+| IL2CPP metadata (in `.data`) | 1.8 MB | 6.2 MB | Scales with code |
+| Assets `data.unity3d` | 3.0 MB | 3.4 MB | ~2 MB is the two normal maps (ASTC 4x4, 1024); ASTC barely compresses |
+| Engine resources, JS | 0.35 MB | | |
+
+Changes for the next build: splash screen off, managed stripping Low → High (release only; DTOs kept by `Infrastructure/Parsing/link.xml`), normal maps and concrete albedo at 512 px (`AssetSetup.DetailTextureSize`), post-processing data removed from both renderers. Unused packages were left: the linker already drops them.
+
 ## Device matrix
 | Feature | Chrome (Win) | Firefox (Win) | Edge (Win) | Android Chrome | iOS Safari |
 |---|---|---|---|---|---|

@@ -1,0 +1,6 @@
+<!-- JsonUtility fills these fields from native code, which the linker can't see under High stripping. -->
+<linker>
+  <assembly fullname="StructureViewer.Infrastructure">
+    <type fullname="StructureViewer.Infrastructure.Parsing.*Dto" preserve="all" />
+  </assembly>
+</linker>

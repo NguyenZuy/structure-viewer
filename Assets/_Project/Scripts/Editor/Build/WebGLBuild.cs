@@ -39,6 +39,8 @@ namespace StructureViewer.Editor.Build
             bool release = mode == WebGLBuildMode.Release;
 
             PlayerSettings.productName = "Structure Viewer";
+            // The splash costs a large logo texture and seconds before the model shows; optional for every licence since Unity 6.
+            PlayerSettings.SplashScreen.show = false;
             PlayerSettings.colorSpace = ColorSpace.Linear;
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.WebGL, false);
             PlayerSettings.SetGraphicsAPIs(BuildTarget.WebGL, new[] { GraphicsDeviceType.OpenGLES3 });
@@ -53,7 +55,8 @@ namespace StructureViewer.Editor.Build
             PlayerSettings.SetScriptingBackend(target, ScriptingImplementation.IL2CPP);
             PlayerSettings.SetIl2CppCodeGeneration(target, Il2CppCodeGeneration.OptimizeSize);
             PlayerSettings.SetIl2CppCompilerConfiguration(target, release ? Il2CppCompilerConfiguration.Master : Il2CppCompilerConfiguration.Release);
-            PlayerSettings.SetManagedStrippingLevel(target, ManagedStrippingLevel.Low);
+            // Code is ~70% of the download. Our code uses no reflection; UI Toolkit and the Input System ship their own link.xml.
+            PlayerSettings.SetManagedStrippingLevel(target, release ? ManagedStrippingLevel.High : ManagedStrippingLevel.Low);
             PlayerSettings.stripEngineCode = true;
 
             UserBuildSettings.codeOptimization = release ? WasmCodeOptimization.DiskSizeLTO : WasmCodeOptimization.BuildTimes;

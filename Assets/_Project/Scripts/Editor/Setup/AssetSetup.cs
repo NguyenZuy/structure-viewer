@@ -19,6 +19,9 @@ namespace StructureViewer.Editor.Setup
         private const string LitShader = "Universal Render Pipeline/Lit";
         private const string UnlitShader = "Universal Render Pipeline/Unlit";
         private const int MaxTextureSize = 1024;
+        // ASTC barely shrinks under Brotli, so texture resolution is download size. Only the wood albedo is seen up close;
+        // normal maps and the low-frequency concrete keep their look at half resolution for a quarter of the bytes.
+        private const int DetailTextureSize = 512;
 
         // World size one texture repeat covers; mesh UVs are in metres.
         private const float WoodTileMetres = 0.75f;
@@ -35,9 +38,9 @@ namespace StructureViewer.Editor.Setup
         public static RenderingConfig Run(SetupPaths paths)
         {
             var woodColor = ConfigureTexture(SetupPaths.WoodColor, normalMap: false);
-            var woodNormal = ConfigureTexture(SetupPaths.WoodNormal, normalMap: true);
-            var concreteColor = ConfigureTexture(SetupPaths.ConcreteColor, normalMap: false);
-            var concreteNormal = ConfigureTexture(SetupPaths.ConcreteNormal, normalMap: true);
+            var woodNormal = ConfigureTexture(SetupPaths.WoodNormal, normalMap: true, DetailTextureSize);
+            var concreteColor = ConfigureTexture(SetupPaths.ConcreteColor, normalMap: false, DetailTextureSize);
+            var concreteNormal = ConfigureTexture(SetupPaths.ConcreteNormal, normalMap: true, DetailTextureSize);
             var grid = EnsureGridTexture(paths.GridTexture);
 
             var wood = EnsureMaterial(paths.Material("Wood"), LitShader);
@@ -77,19 +80,19 @@ namespace StructureViewer.Editor.Setup
             return config;
         }
 
-        private static Texture2D ConfigureTexture(string path, bool normalMap,
+        private static Texture2D ConfigureTexture(string path, bool normalMap, int maxSize = MaxTextureSize,
             TextureImporterCompression compression = TextureImporterCompression.Compressed, int anisoLevel = 2)
         {
             var importer = AssetImporter.GetAtPath(path) as TextureImporter
                            ?? throw new InvalidOperationException($"Texture not found: {path}");
             var type = normalMap ? TextureImporterType.NormalMap : TextureImporterType.Default;
 
-            if (importer.textureType != type || importer.maxTextureSize != MaxTextureSize ||
+            if (importer.textureType != type || importer.maxTextureSize != maxSize ||
                 importer.textureCompression != compression || !importer.mipmapEnabled ||
                 importer.wrapMode != TextureWrapMode.Repeat || importer.anisoLevel != anisoLevel)
             {
                 importer.textureType = type;
-                importer.maxTextureSize = MaxTextureSize;
+                importer.maxTextureSize = maxSize;
                 importer.textureCompression = compression;
                 importer.mipmapEnabled = true;
                 importer.wrapMode = TextureWrapMode.Repeat;
@@ -109,7 +112,7 @@ namespace StructureViewer.Editor.Setup
                 AssetDatabase.ImportAsset(path);
             }
             // Uncompressed: block compression smears the 2 px alpha lines; the texture is only 64 KB.
-            return ConfigureTexture(path, normalMap: false, TextureImporterCompression.Uncompressed, anisoLevel: 8);
+            return ConfigureTexture(path, normalMap: false, MaxTextureSize, TextureImporterCompression.Uncompressed, anisoLevel: 8);
         }
 
         // Lines sit on the texture edges so they meet across the repeat seam; transparent pixels keep the line colour
