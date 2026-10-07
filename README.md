@@ -84,7 +84,7 @@ flowchart LR
 
 ### Key decisions
 
-- **Combined meshes, per-element picking**: each assembly is drawn as one mesh per material, so the ~820 elements need about 80 draw calls. Each element keeps its own collider (with no renderer) for exact picking. Changing visibility or highlighting only marks a group dirty, and each dirty group is rebuilt at most once per frame, reusing its `Mesh`.
+- **Combined meshes, per-element picking**: each assembly is drawn as one mesh per material, so the ~1,000 elements need about 100 draw calls. Each element keeps its own collider (with no renderer) for exact picking. Changing visibility or highlighting only marks a group dirty, and each dirty group is rebuilt at most once per frame, reusing its `Mesh`.
 - **Generated box meshes**: UVs run in metres along each member, so wood grain follows every stud and joist without stretching. The geometry code is plain C# and unit-tested.
 - **Immutable visibility snapshots**: every command stores the previous `VisibilityState`, so undo restores it exactly.
 - **Display modes as strategies**: `RealisticPalette`, `ColorByPalette`, `XRayPalette` and `ClayPalette` map `(element, highlight state)` to a cached shared material. Adding a mode means adding a class. No `MaterialPropertyBlock`, so the SRP Batcher stays effective.
@@ -96,7 +96,7 @@ The full spec is in [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Sample data
 
-The house is a **hypothetical** two-storey American colonial with a covered porch: about 700 members, 110 panels and 2 slabs. An editor tool (`Tools > Structure Viewer > Generate Sample House`) produces it as JSON. It is plausible, but **not engineered or code-compliant**.
+The house is a **hypothetical** two-storey American colonial with a covered porch: about 700 members, 316 panels (sheathing, doors, glazing, trim) and 2 slabs. An editor tool (`Tools > Structure Viewer > Generate Sample House`) produces it as JSON. It is plausible, but **not engineered or code-compliant**.
 
 ## Tests
 
