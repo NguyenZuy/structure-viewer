@@ -35,7 +35,7 @@ A1 Foundation ─► A2 Contracts ┤ B02 Sample generator     B10 Visibility & 
 | A2 | [Contracts, fixtures & fakes](a2-contracts.md) | 1.5 h | A1 | ☑ |
 | B01 | [JSON parser & load use case](b01-json-parser.md) | 1 h | A2 | ☑ |
 | B02 | [Sample house generator](b02-sample-generator.md) | 1.5 h | A2 | ☑ |
-| B03 | [Geometry & structure renderer](b03-structure-renderer.md) | 2.5 h | A2 | ☐ |
+| B03 | [Geometry & structure renderer](b03-structure-renderer.md) | 2.5 h | A2 | ☑ |
 | B04 | [Materials, textures & scene setup](b04-materials-setup.md) | 1 h | A2 | ☐ |
 | B05 | [Input gestures](b05-input-gestures.md) | 1 h | A2 | ☐ |
 | B06 | [Camera controller](b06-camera.md) | 1 h | A2 | ☐ |
