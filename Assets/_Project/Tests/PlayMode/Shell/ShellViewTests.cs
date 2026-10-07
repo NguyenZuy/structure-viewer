@@ -45,6 +45,21 @@ namespace StructureViewer.Tests.PlayMode.Shell
         }
 
         [UnityTest]
+        public IEnumerator AddFloatingOverlay_DrawsAboveSidePanelsButUnderTheSheet()
+        {
+            yield return Frames();
+            var card = new VisualElement();
+
+            _shell.AddFloatingOverlay(card);
+
+            var overlay = Root.Q("overlay");
+            Assert.AreSame(overlay, card.parent);
+            var layers = overlay.parent;
+            Assert.Less(layers.IndexOf(Root.Q("shell-root")), layers.IndexOf(overlay), "the overlay layer is drawn after the panels");
+            Assert.Less(overlay.IndexOf(card), overlay.IndexOf(Root.Q("sheet")));
+        }
+
+        [UnityTest]
         public IEnumerator AddToolbarItem_CreatesTouchSizedButton()
         {
             yield return SetPanelWidth(1280f);

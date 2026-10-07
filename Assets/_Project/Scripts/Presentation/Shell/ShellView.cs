@@ -68,6 +68,9 @@ namespace StructureViewer.Presentation.Shell
         // Full-screen layers drawn over the 3D view but under every panel (measure line, labels). They must ignore picking.
         public void AddViewportOverlay(VisualElement overlay) => _root.Insert(0, overlay);
 
+        // Cards drawn above the side panels, like toasts, but under sheets and menus so those still cover them.
+        public void AddFloatingOverlay(VisualElement overlay) => _overlay.Insert(_overlay.IndexOf(_toasts) + 1, overlay);
+
         public void ShowSheet(VisualElement content, string title) => _sheet.Show(content, title);
 
         public void HideSheet() => _sheet.Hide();

@@ -13,7 +13,7 @@
 - [x] Dev FPS counter only in `DEVELOPMENT_BUILD`.
 
 ## Notes
-- `NoticeView` (Presentation/Notices): a card under the toolbar over the 3D view, inserted with `ShellView.AddViewportOverlay`; only the card takes pointer input. Used by `OnboardingPresenter` (mouse or touch wording, guessed from `isMobilePlatform` + touchscreen, corrected by the first tap; dismissal stored via `IOnboardingStore` → `PlayerPrefsOnboardingStore`, try/catch for blocked storage) and `EverythingHiddenPresenter` ("Everything is hidden." + **Show all**).
+- `NoticeView` (Presentation/Notices): a card under the toolbar, inserted with `ShellView.AddFloatingOverlay` (above the side panels like toasts, under sheets: in the viewport layer the panels covered it at ~800–1000 px widths); only the card takes pointer input. Used by `OnboardingPresenter` (mouse or touch wording, guessed from `isMobilePlatform` + touchscreen, corrected by the first tap; dismissal stored via `IOnboardingStore` → `PlayerPrefsOnboardingStore`, try/catch for blocked storage) and `EverythingHiddenPresenter` ("Everything is hidden." + **Show all**).
 - Empty states already covered: nothing selected → info panel hint (B09); load error → error toast (C1); no model → panels' "No structure loaded".
 - Initial camera: `CameraController` starts at yaw 45° / pitch 30° (front-left 3/4) and animates into `FitAll` on load (C1).
 - `FpsCounter` is added only under `DEVELOPMENT_BUILD` (bottom-left, text updated twice a second).

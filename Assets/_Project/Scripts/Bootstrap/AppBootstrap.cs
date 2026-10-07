@@ -114,8 +114,8 @@ namespace StructureViewer.Bootstrap
 
             var hint = new NoticeView("onboarding-hint");
             var everythingHidden = new NoticeView("everything-hidden");
-            _shell.AddViewportOverlay(hint.Root);
-            _shell.AddViewportOverlay(everythingHidden.Root);
+            _shell.AddFloatingOverlay(hint.Root);
+            _shell.AddFloatingOverlay(everythingHidden.Root);
             Own(new OnboardingPresenter(hint, new PlayerPrefsOnboardingStore(), _pointer, GuessPointerDevice()));
             Own(new EverythingHiddenPresenter(everythingHidden, _renderer, Actions.ShowAll, Bus));
 #if DEVELOPMENT_BUILD
