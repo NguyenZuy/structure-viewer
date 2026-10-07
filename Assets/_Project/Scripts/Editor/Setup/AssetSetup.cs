@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using StructureViewer.Presentation.Contracts;
+using StructureViewer.Presentation.Display;
 using UnityEditor;
 using UnityEditor.Rendering.Universal.ShaderGUI;
 using UnityEngine;
@@ -69,6 +70,8 @@ namespace StructureViewer.Editor.Setup
             so.ApplyModifiedPropertiesWithoutUndo();
 
             EnsurePanelSettings(paths.PanelSettings);
+            // Created once with the coded defaults; later runs keep any colours tweaked in the inspector.
+            EnsureAsset(paths.DisplayPalette, ScriptableObject.CreateInstance<DisplayPaletteAsset>);
 
             AssetDatabase.SaveAssets();
             return config;

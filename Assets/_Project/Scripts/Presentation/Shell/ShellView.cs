@@ -65,6 +65,9 @@ namespace StructureViewer.Presentation.Shell
             UpdateSlotFrames();
         }
 
+        // Full-screen layers drawn over the 3D view but under every panel (measure line, labels). They must ignore picking.
+        public void AddViewportOverlay(VisualElement overlay) => _root.Insert(0, overlay);
+
         public void ShowSheet(VisualElement content, string title) => _sheet.Show(content, title);
 
         public void HideSheet() => _sheet.Hide();

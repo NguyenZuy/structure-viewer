@@ -140,6 +140,10 @@ namespace StructureViewer.Presentation.Structure
 
         public Bounds GetWorldBounds(int index) => _model.Elements[index].Bounds;
 
+        // Read back the requested state (end-to-end tests).
+        public bool IsVisible(int index) => _visible[index];
+        public Material MaterialOf(int index) => _materials[_materialOf[index]];
+
         public bool TryPick(Vector2 screenPosition, out PickHit hit)
         {
             hit = default;

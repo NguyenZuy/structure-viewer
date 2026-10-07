@@ -1,6 +1,8 @@
 using StructureViewer.Bootstrap;
 using StructureViewer.Presentation.CameraControl;
 using StructureViewer.Presentation.Input;
+using StructureViewer.Presentation.Labels;
+using StructureViewer.Presentation.Measure;
 using StructureViewer.Presentation.Shell;
 using StructureViewer.Presentation.Structure;
 using UnityEditor;
@@ -55,7 +57,8 @@ namespace StructureViewer.Editor.Setup
             ResetTransform(app.transform);
             var pointer = GetOrAdd<PointerInput>(app);
             pointer.Ui = document;
-            WireBootstrap(GetOrAdd<AppBootstrap>(app), assets, renderer, camera, pointer, shell);
+            var views = new FeatureViews(GetOrAdd<ShortcutInput>(app), GetOrAdd<MeasureView>(app), GetOrAdd<LabelsView>(app));
+            WireBootstrap(GetOrAdd<AppBootstrap>(app), assets, renderer, camera, pointer, shell, views);
 
             RenderSettings.ambientMode = AmbientMode.Trilight;
             RenderSettings.ambientSkyColor = AmbientSky;
@@ -86,16 +89,38 @@ namespace StructureViewer.Editor.Setup
             return GetOrAdd<CameraController>(go);
         }
 
+        private readonly struct FeatureViews
+        {
+            public FeatureViews(ShortcutInput shortcuts, MeasureView measure, LabelsView labels)
+            {
+                Shortcuts = shortcuts;
+                Measure = measure;
+                Labels = labels;
+            }
+
+            public ShortcutInput Shortcuts { get; }
+            public MeasureView Measure { get; }
+            public LabelsView Labels { get; }
+        }
+
         private static void WireBootstrap(AppBootstrap bootstrap, SceneAssets assets, StructureRenderer renderer,
-            CameraController camera, PointerInput pointer, ShellView shell)
+            CameraController camera, PointerInput pointer, ShellView shell, FeatureViews views)
         {
             var so = new SerializedObject(bootstrap);
             so.FindProperty("_structureJson").objectReferenceValue = assets.Structure;
             so.FindProperty("_rendering").objectReferenceValue = assets.Rendering;
+            so.FindProperty("_palette").objectReferenceValue = assets.Palette;
             so.FindProperty("_renderer").objectReferenceValue = renderer;
             so.FindProperty("_camera").objectReferenceValue = camera;
             so.FindProperty("_pointer").objectReferenceValue = pointer;
+            so.FindProperty("_shortcuts").objectReferenceValue = views.Shortcuts;
             so.FindProperty("_shell").objectReferenceValue = shell;
+            so.FindProperty("_measureView").objectReferenceValue = views.Measure;
+            so.FindProperty("_labelsView").objectReferenceValue = views.Labels;
+            so.FindProperty("_infoLayout").objectReferenceValue = assets.InfoLayout;
+            so.FindProperty("_layersLayout").objectReferenceValue = assets.LayersLayout;
+            so.FindProperty("_legendLayout").objectReferenceValue = assets.LegendLayout;
+            so.FindProperty("_takeoffLayout").objectReferenceValue = assets.TakeoffLayout;
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 

@@ -1,5 +1,6 @@
 using System;
 using StructureViewer.Presentation.Contracts;
+using StructureViewer.Presentation.Display;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,6 +14,11 @@ namespace StructureViewer.Editor.Setup
         public PanelSettings PanelSettings { get; private set; }
         public VisualTreeAsset ShellLayout { get; private set; }
         public TextAsset Structure { get; private set; }
+        public DisplayPaletteAsset Palette { get; private set; }
+        public VisualTreeAsset InfoLayout { get; private set; }
+        public VisualTreeAsset LayersLayout { get; private set; }
+        public VisualTreeAsset LegendLayout { get; private set; }
+        public VisualTreeAsset TakeoffLayout { get; private set; }
 
         public static SceneAssets Load(SetupPaths paths) =>
             new SceneAssets
@@ -20,7 +26,12 @@ namespace StructureViewer.Editor.Setup
                 Rendering = Require<RenderingConfig>(paths.RenderingConfig),
                 PanelSettings = Require<PanelSettings>(paths.PanelSettings),
                 ShellLayout = Require<VisualTreeAsset>(SetupPaths.ShellLayout),
-                Structure = Require<TextAsset>(SetupPaths.SampleStructure)
+                Structure = Require<TextAsset>(SetupPaths.SampleStructure),
+                Palette = Require<DisplayPaletteAsset>(paths.DisplayPalette),
+                InfoLayout = Require<VisualTreeAsset>(SetupPaths.InfoLayout),
+                LayersLayout = Require<VisualTreeAsset>(SetupPaths.LayersLayout),
+                LegendLayout = Require<VisualTreeAsset>(SetupPaths.LegendLayout),
+                TakeoffLayout = Require<VisualTreeAsset>(SetupPaths.TakeoffLayout)
             };
 
         private static T Require<T>(string path) where T : UnityEngine.Object

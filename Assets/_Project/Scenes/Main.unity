@@ -373,6 +373,9 @@ GameObject:
   - component: {fileID: 374616486}
   - component: {fileID: 374616488}
   - component: {fileID: 374616487}
+  - component: {fileID: 374616491}
+  - component: {fileID: 374616490}
+  - component: {fileID: 374616489}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -409,10 +412,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: StructureViewer.Bootstrap::StructureViewer.Bootstrap.AppBootstrap
   _structureJson: {fileID: 4900000, guid: 38fd4e7efe445dd4885a48daa635272d, type: 3}
   _rendering: {fileID: 11400000, guid: cf70611834c483748a48d7908638262f, type: 2}
+  _palette: {fileID: 11400000, guid: 080916519c400e44ebdb98e8e3641647, type: 2}
   _renderer: {fileID: 721191596}
   _camera: {fileID: 330585548}
   _pointer: {fileID: 374616488}
+  _shortcuts: {fileID: 374616491}
   _shell: {fileID: 1436248009}
+  _measureView: {fileID: 374616490}
+  _labelsView: {fileID: 374616489}
+  _infoLayout: {fileID: 9197481963319205126, guid: 3cdf1864626a88e4983acdb8bfbb5ec1, type: 3}
+  _layersLayout: {fileID: 9197481963319205126, guid: 2d462f070c6555d4d82f5b82306aaa2a, type: 3}
+  _legendLayout: {fileID: 9197481963319205126, guid: fa231f784c900324d8692596cc2b89b3, type: 3}
+  _takeoffLayout: {fileID: 9197481963319205126, guid: 6a4f355a9bfac4749bdcc1ce2572b682, type: 3}
 --- !u!114 &374616488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,6 +437,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: StructureViewer.Presentation::StructureViewer.Presentation.Input.PointerInput
   _ui: {fileID: 1436248010}
+--- !u!114 &374616489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374616485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae773075d18f03341966c3c7d34fdf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StructureViewer.Presentation::StructureViewer.Presentation.Labels.LabelsView
+--- !u!114 &374616490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374616485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15037d390d2b5314fa08937d2bac84f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StructureViewer.Presentation::StructureViewer.Presentation.Measure.MeasureView
+--- !u!114 &374616491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374616485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342fa04ecd23fee4b9245acd9dba7bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StructureViewer.Presentation::StructureViewer.Presentation.Input.ShortcutInput
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

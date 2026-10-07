@@ -13,6 +13,12 @@ namespace StructureViewer.Tests.EditMode.Setup
 {
     public sealed class SetupToolTests
     {
+        private static readonly string[] BootstrapFields =
+        {
+            "_structureJson", "_rendering", "_palette", "_renderer", "_camera", "_pointer", "_shortcuts", "_shell",
+            "_measureView", "_labelsView", "_infoLayout", "_layersLayout", "_legendLayout", "_takeoffLayout"
+        };
+
         private string _root;
         private SetupPaths _paths;
         private Scene _scene;
@@ -111,7 +117,7 @@ namespace StructureViewer.Tests.EditMode.Setup
             var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
             var app = scene.GetRootGameObjects().Single(go => go.name == SceneLayout.AppName);
             var so = new SerializedObject(app.GetComponent<AppBootstrap>());
-            foreach (var field in new[] { "_structureJson", "_rendering", "_renderer", "_camera", "_pointer", "_shell" })
+            foreach (var field in BootstrapFields)
                 Assert.IsNotNull(so.FindProperty(field).objectReferenceValue, field);
             Assert.IsNotNull(app.GetComponent<PointerInput>().Ui);
         }

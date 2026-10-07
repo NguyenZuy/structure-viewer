@@ -56,7 +56,8 @@ namespace StructureViewer.Presentation.Input
         }
 
         // Created lazily so subscribers can attach before Awake runs.
-        private GestureClassifier Classifier => _classifier ??= new GestureClassifier(GestureSettings.ForDpi(Screen.dpi));
+        // Public so end-to-end tests can feed real gestures through the same classifier the devices use.
+        public GestureClassifier Classifier => _classifier ??= new GestureClassifier(GestureSettings.ForDpi(Screen.dpi));
 
         public UIDocument Ui
         {
