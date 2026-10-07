@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="Shell.uss" />
+    <!-- Layout containers ignore picking so the 3D view gets input everywhere a real control isn't (see B05). -->
+    <ui:VisualElement name="shell-root" class="sv-shell" picking-mode="Ignore">
+        <ui:VisualElement name="toolbar" class="sv-toolbar">
+            <ui:Label name="app-title" class="sv-toolbar__title" text="Structure Viewer" picking-mode="Ignore" />
+            <ui:VisualElement name="toolbar-items" class="sv-toolbar__items" picking-mode="Ignore" />
+            <ui:Button name="toolbar-overflow" class="sv-button sv-toolbar__overflow" text="•••" />
+        </ui:VisualElement>
+        <ui:VisualElement name="body" class="sv-body" picking-mode="Ignore">
+            <ui:VisualElement name="left-frame" class="sv-slot-frame sv-slot-frame--left" picking-mode="Ignore">
+                <ui:VisualElement name="left-slot" class="sv-slot" />
+                <ui:Button name="left-toggle" class="sv-button sv-slot-toggle" text="‹" />
+            </ui:VisualElement>
+            <ui:VisualElement name="center" class="sv-center" picking-mode="Ignore">
+                <ui:VisualElement name="bottom-slot" class="sv-slot sv-slot--bottom" />
+            </ui:VisualElement>
+            <ui:VisualElement name="right-frame" class="sv-slot-frame sv-slot-frame--right" picking-mode="Ignore">
+                <ui:Button name="right-toggle" class="sv-button sv-slot-toggle" text="›" />
+                <ui:VisualElement name="right-slot" class="sv-slot" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <!-- Overlays are positioned inside the safe area by code (absolute children ignore padding). -->
+    <ui:VisualElement name="overlay" class="sv-overlay" picking-mode="Ignore">
+        <ui:VisualElement name="toasts" class="sv-toasts" picking-mode="Ignore" />
+        <ui:VisualElement name="sheet" class="sv-sheet sv-hidden">
+            <ui:VisualElement name="sheet-handle" class="sv-sheet__handle">
+                <ui:VisualElement class="sv-sheet__grip" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="sv-sheet__header" picking-mode="Ignore">
+                <ui:Label name="sheet-title" class="sv-sheet__title" picking-mode="Ignore" />
+                <ui:Button name="sheet-close" class="sv-button sv-sheet__close" text="×" />
+            </ui:VisualElement>
+            <ui:ScrollView name="sheet-content" class="sv-sheet__content" />
+        </ui:VisualElement>
+        <ui:VisualElement name="overflow-scrim" class="sv-scrim sv-hidden">
+            <ui:VisualElement name="overflow-menu" class="sv-menu" />
+        </ui:VisualElement>
+        <ui:Label name="tooltip" class="sv-tooltip sv-hidden" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

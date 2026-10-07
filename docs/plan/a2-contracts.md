@@ -32,7 +32,7 @@ Interfaces here are seams for tests or platform boundaries (allowed by CLAUDE.md
 - [x] `IStructureRenderer`: `Count`, `SetVisible(i, bool)`, `SetMaterial(i, Material)`, `GetWorldBounds(i)`, `TryPick(Vector2 screen, out PickHit)` (`PickHit`: index, world point), `ModelBounds`.
 - [x] `IPointerEvents`: `Tapped(TapEvent)` (screen pos, isDouble, additive, device), `Hovered(Vector2)` (mouse only), `Orbited(Vector2)`, `Panned(Vector2)`, `Zoomed(float, Vector2)`, `PointerDevice Current`. `PointerDevice` = `Mouse, Touch` (not `PointerType`: clashes with `UnityEngine.PointerType`).
 - [x] `ICameraControl`: `Camera`, `FitAll(Bounds)`, `Focus(Bounds)`.
-- [x] `IShell`: `LeftSlot`, `RightSlot`, `BottomSlot`, `IsCompact`, `CompactChanged`, `ShowSheet(VisualElement, title)`, `HideSheet()`, `AddToolbarItem(ToolbarItem)`, `SetToolbarItemState(id, active, enabled)`, `ShowToast(string)`.
+- [x] `IShell`: `LeftSlot`, `RightSlot`, `BottomSlot`, `IsCompact`, `CompactChanged`, `ShowSheet(VisualElement, title)`, `HideSheet()`, `SheetHidden` (added in B07: user closed the sheet), `AddToolbarItem(ToolbarItem)`, `SetToolbarItemState(id, active, enabled)`, `ShowToast(string)`.
 - [x] `RenderingConfig` ScriptableObject **class** (asset is created in B04): wood, concrete, sheathing (transparent), flat-opaque template, flat-transparent template, overlay material, grid material.
 - [x] `UI/Theme.uss` — design tokens only (colours, spacing, 44 px touch target, font sizes); every panel imports it.
 

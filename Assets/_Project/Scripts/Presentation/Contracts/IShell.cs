@@ -18,6 +18,9 @@ namespace StructureViewer.Presentation.Contracts
         void ShowSheet(VisualElement content, string title);
         void HideSheet();
 
+        // Raised whenever the sheet goes away: HideSheet, the close button, or a swipe down. Not raised on replace.
+        event Action SheetHidden;
+
         void AddToolbarItem(ToolbarItem item);
         void SetToolbarItemState(string id, bool active, bool enabled);
 

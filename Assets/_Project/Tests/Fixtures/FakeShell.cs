@@ -13,6 +13,7 @@ namespace StructureViewer.Tests.Fixtures
 
         public bool IsCompact { get; private set; }
         public event Action<bool> CompactChanged;
+        public event Action SheetHidden;
 
         public Dictionary<string, ToolbarItem> ToolbarItems { get; } = new Dictionary<string, ToolbarItem>();
         public Dictionary<string, (bool Active, bool Enabled)> ToolbarStates { get; } = new Dictionary<string, (bool, bool)>();
@@ -36,8 +37,11 @@ namespace StructureViewer.Tests.Fixtures
 
         public void HideSheet()
         {
+            if (SheetContent == null)
+                return;
             SheetContent = null;
             SheetTitle = null;
+            SheetHidden?.Invoke();
         }
 
         public void AddToolbarItem(ToolbarItem item)
