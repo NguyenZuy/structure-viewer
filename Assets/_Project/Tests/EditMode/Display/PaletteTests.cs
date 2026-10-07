@@ -97,6 +97,20 @@ namespace StructureViewer.Tests.EditMode.Display
             Assert.AreEqual(1f, _palette.RealisticDoor.a);
         }
 
+        [TestCase("Door")]
+        [TestCase("Casing")]
+        [TestCase("Muntin")]
+        public void Realistic_SolidPanels_RenderOpaque_EvenWhenHighlighted(string type)
+        {
+            var info = new ElementInfo("W-X01", ElementCategory.Opening, type, "W", 0);
+            var corners = new[] { Vector3.zero, Vector3.right, new Vector3(1f, 1f, 0f), Vector3.up };
+            var panel = Element.ForPanel(0, info, new Panel(corners, 0.04f));
+            var realistic = new RealisticPalette(_library, _palette);
+
+            Assert.IsTrue(IsOpaque(realistic.Resolve(panel, HighlightState.None)));
+            Assert.IsTrue(IsOpaque(realistic.Resolve(panel, HighlightState.Member)));
+        }
+
         [Test]
         public void Realistic_Window_UsesTheGlossyGlassTemplate()
         {

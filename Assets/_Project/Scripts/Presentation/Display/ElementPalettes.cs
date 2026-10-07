@@ -1,5 +1,6 @@
 using StructureViewer.Domain.Display;
 using StructureViewer.Domain.Structure;
+using StructureViewer.Presentation.Contracts;
 using UnityEngine;
 
 namespace StructureViewer.Presentation.Display
@@ -21,8 +22,8 @@ namespace StructureViewer.Presentation.Display
             _palette = palette;
         }
 
-        // Highlights tint the textured look instead of replacing it, as in the reference. Panels (sheathing, doors, glazing)
-        // get a per-type tone (their template stays transparent; only the colour and alpha change).
+        // Highlights tint the textured look instead of replacing it, as in the reference. Panels (sheathing, doors, glazing,
+        // trim) get a per-type tone; only the colour and alpha change, never a template's surface type.
         public Material Resolve(Element element, HighlightState state)
         {
             var config = _library.Config;
@@ -31,14 +32,20 @@ namespace StructureViewer.Presentation.Display
                 var tone = _palette.RealisticPanelFor(element.Info.Type);
                 var color = state == HighlightState.None ? tone : Highlight(_palette, state);
                 color.a = tone.a;
-                // Glazing gets its own glossy template; older configs without one fall back to sheathing.
-                var panelTemplate = element.Info.Type == "Window" && config.Glass != null ? config.Glass : config.Sheathing;
-                return _library.Get(panelTemplate, color);
+                return _library.Get(PanelTemplate(config, element.Info.Type, tone.a), color);
             }
 
             var template = element.Kind == ElementKind.Slab ? config.Concrete : config.Wood;
             return state == HighlightState.None ? template : _library.Tint(template, Highlight(_palette, state));
         }
+
+        // Solid tones (doors, trim) go through the opaque pass: they write depth, so they never sort against the
+        // translucent house wrap behind them, and batch without interleaving with the transparent variants.
+        // Glazing has its own glossy template; older configs without one fall back to sheathing.
+        private static Material PanelTemplate(RenderingConfig config, string type, float alpha) =>
+            alpha >= 1f ? config.FlatOpaque
+            : type == "Window" && config.Glass != null ? config.Glass
+            : config.Sheathing;
 
         internal static Color Highlight(DisplayPaletteAsset palette, HighlightState state) =>
             state switch
