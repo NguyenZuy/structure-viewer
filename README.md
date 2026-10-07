@@ -35,3 +35,12 @@ I built this with Claude Code. AI writes code fast but also makes mistakes fast,
 | Phone, low end | 45 s | 6.2 s | ~42 |
 
 Phones were tested on a Xiaomi 14T, with Chrome CPU and network throttling for mid and low end.
+
+What keeps it fast:
+
+- **Fewer draw calls.** Each wall or truss is one combined mesh per material. Members keep their own colliders, so picking stays exact.
+- **SRP Batcher friendly.** Only shared materials, no `MaterialPropertyBlock`.
+- **Cheap updates.** A change only rebuilds the affected mesh, at most once per frame, and per-frame code doesn't allocate.
+- **Light rendering.** No realtime shadows or post effects.
+- **Per-platform settings.** At startup the app checks if it runs on a phone and picks the PC or Mobile quality level, each with its own URP asset. Phones get a 0.8 render scale and no MSAA or HDR, and the page caps the pixel ratio at 2.
+- **Small build.** Brotli, high code stripping, 512 px normal maps and no splash screen.
