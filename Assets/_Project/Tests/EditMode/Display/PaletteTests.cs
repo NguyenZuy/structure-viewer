@@ -38,6 +38,15 @@ namespace StructureViewer.Tests.EditMode.Display
 
         private static bool IsOpaque(Material material) => material.renderQueue < 2500;
 
+        // Colours read back from a material differ from what was set in the last float bits.
+        private static void AssertColor(Color expected, Color actual)
+        {
+            Assert.AreEqual(expected.r, actual.r, 1e-4f, "r");
+            Assert.AreEqual(expected.g, actual.g, 1e-4f, "g");
+            Assert.AreEqual(expected.b, actual.b, 1e-4f, "b");
+            Assert.AreEqual(expected.a, actual.a, 1e-4f, "a");
+        }
+
         [Test]
         public void Realistic_None_UsesTemplates_HighlightTintsAClone()
         {
@@ -63,7 +72,7 @@ namespace StructureViewer.Tests.EditMode.Display
             var selected = realistic.Resolve(panel, HighlightState.Assembly);
 
             Assert.IsFalse(IsOpaque(normal));
-            Assert.AreEqual(_palette.RealisticRoofSheathing, normal.GetColor("_BaseColor"));
+            AssertColor(_palette.RealisticRoofSheathing, normal.GetColor("_BaseColor"));
             Assert.AreEqual(_palette.RealisticRoofSheathing.a, selected.GetColor("_BaseColor").a, 1e-5f);
             Assert.AreNotSame(normal, selected);
         }
