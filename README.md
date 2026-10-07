@@ -113,11 +113,16 @@ Unity -batchmode -projectPath . -runTests -testPlatform EditMode -testResults ./
 
 ## Performance
 
-| Device | Browser | Realistic | X-ray |
-|---|---|---|---|
-| <!-- TODO --> | | | |
+| Measure | Value | Source |
+|---|---|---|
+| Download | **8.3 MB** (Brotli): code 5.3 MB, IL2CPP metadata 1.3 MB, assets 1.5 MB | Release build |
+| Cold download, desktop | ~0.8 s for all build files on a fast connection | Chrome, live site |
+| Rendering | ~93 draw calls (71 via SRP Batcher), ~14k triangles, GPU ~4.3 ms/frame | Editor Stats, Intel Iris Xe laptop |
+| Phone | ~60 FPS (display cap) | Xiaomi 14T, Chrome, perf spike with 1,600 separate renderers, before mesh combining |
 
-<!-- TODO: build size, cold / cached load time. Editor stats: ~83 draw calls, 5 SetPass calls, ~12k triangles. -->
+<!-- TODO: FPS of the release build on a phone and a desktop browser. -->
+
+Size work that got here from a first 10.8 MB build: managed stripping High, no splash screen, 512 px normal maps, no post-processing resources. Code (UI Toolkit, URP, Input System) is now ~80% of the download.
 
 ## Building
 
