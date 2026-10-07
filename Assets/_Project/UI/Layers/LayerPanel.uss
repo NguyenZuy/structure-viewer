@@ -1,0 +1,104 @@
+@import url("../Theme.uss");
+
+/* The instantiated template root, so the panel fills its slot or sheet. */
+.sv-layers-host {
+    flex-grow: 1;
+}
+
+.sv-layers {
+    flex-grow: 1;
+    min-width: 0;
+    padding: var(--space-m);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-m);
+}
+
+.sv-layers__empty {
+    padding: var(--space-l) 0;
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+}
+
+.sv-layers__content {
+    flex-grow: 1;
+}
+
+.sv-layers__filter {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: var(--space-s);
+    margin-bottom: var(--space-s);
+    border-radius: var(--radius-s);
+    border-left-width: 4px;
+    border-left-color: var(--color-accent);
+    background-color: var(--color-surface-raised);
+}
+
+.sv-layers__filter-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-right: var(--space-s);
+    white-space: normal;
+}
+
+.sv-layers__section-title {
+    margin-top: var(--space-m);
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-s);
+    -unity-font-style: bold;
+}
+
+.sv-layers__row {
+    flex-direction: row;
+    align-items: center;
+    min-height: var(--touch-target);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-border);
+}
+
+.sv-layers__toggle {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: var(--touch-target);
+    margin: 0;
+}
+
+/* Built-in Toggle puts the label first; let it take the row width so the whole row is the touch target. */
+.sv-layers__toggle > .unity-toggle__input {
+    flex-grow: 0;
+}
+
+.sv-layers__toggle > .unity-label {
+    flex-grow: 1;
+    min-width: 0;
+    color: var(--color-text);
+}
+
+.sv-layers__count {
+    min-width: 36px;
+    margin-right: var(--space-s);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-right;
+}
+
+.sv-layers__button {
+    min-height: var(--touch-target);
+    margin: 0;
+    padding: 0 var(--space-m);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.sv-layers__button:hover {
+    border-color: var(--color-text-muted);
+}
+
+.sv-layers__button:active {
+    background-color: var(--color-border);
+}

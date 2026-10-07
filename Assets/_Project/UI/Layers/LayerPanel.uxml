@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="LayerPanel.uss" />
+    <ui:VisualElement name="layers-root" class="sv-layers">
+        <ui:Label name="layers-empty" class="sv-layers__empty" text="No structure loaded" />
+        <ui:ScrollView name="layers-content" class="sv-layers__content">
+            <ui:VisualElement name="layers-filter" class="sv-layers__filter">
+                <ui:Label class="sv-layers__filter-text" text="Some elements are isolated or hidden." />
+                <ui:Button name="layers-show-all" class="sv-layers__button" text="Show all" />
+            </ui:VisualElement>
+            <ui:Label class="sv-layers__section-title" text="Categories" />
+            <ui:VisualElement name="layers-categories" />
+            <ui:Label class="sv-layers__section-title" text="Levels" />
+            <ui:VisualElement name="layers-levels" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>
