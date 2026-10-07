@@ -6,7 +6,9 @@
         "StructureViewer.Application",
         "StructureViewer.Infrastructure",
         "StructureViewer.Presentation",
-        "StructureViewer.Bootstrap"
+        "StructureViewer.Bootstrap",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.Editor"
     ],
     "includePlatforms": [
         "Editor"
