@@ -54,8 +54,8 @@ namespace StructureViewer.Presentation.Shell
             _sheet = new SheetView(_root);
             _sheet.Hidden += () => SheetHidden?.Invoke();
 
-            SetupCollapse(_leftFrame, _root.Q<Button>("left-toggle"), "‹", "›");
-            SetupCollapse(_rightFrame, _root.Q<Button>("right-toggle"), "›", "‹");
+            SetupCollapse(_leftFrame, _root.Q<Button>("left-toggle"), ToolbarIcon.ChevronLeft, ToolbarIcon.ChevronRight);
+            SetupCollapse(_rightFrame, _root.Q<Button>("right-toggle"), ToolbarIcon.ChevronRight, ToolbarIcon.ChevronLeft);
 
             IsCompact = false;
             _root.RemoveFromClassList(CompactClass);
@@ -123,12 +123,15 @@ namespace StructureViewer.Presentation.Shell
             _rightFrame.EnableInClassList("sv-hidden", RightSlot.childCount == 0);
         }
 
-        private static void SetupCollapse(VisualElement frame, Button toggle, string expandedGlyph, string collapsedGlyph)
+        private static void SetupCollapse(VisualElement frame, Button toggle, ToolbarIcon expanded, ToolbarIcon collapsed)
         {
+            toggle.text = string.Empty;
+            var icon = Icons.Create(expanded, "sv-icon");
+            toggle.Add(icon);
             toggle.clicked += () =>
             {
                 frame.ToggleInClassList("sv-slot-frame--collapsed");
-                toggle.text = frame.ClassListContains("sv-slot-frame--collapsed") ? collapsedGlyph : expandedGlyph;
+                Icons.Set(icon, frame.ClassListContains("sv-slot-frame--collapsed") ? collapsed : expanded);
             };
         }
     }

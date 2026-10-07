@@ -4,11 +4,11 @@ namespace StructureViewer.Presentation.Contracts
 {
     public sealed class ToolbarItem
     {
-        public ToolbarItem(string id, string label, string glyph, string tooltip, Action onClick, bool isToggle = false, int priority = 0)
+        public ToolbarItem(string id, string label, ToolbarIcon icon, string tooltip, Action onClick, bool isToggle = false, int priority = 0)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             Label = label;
-            Glyph = glyph;
+            Icon = icon;
             Tooltip = tooltip;
             OnClick = onClick ?? throw new ArgumentNullException(nameof(onClick));
             IsToggle = isToggle;
@@ -18,8 +18,7 @@ namespace StructureViewer.Presentation.Contracts
         public string Id { get; }
         public string Label { get; }
 
-        // Text/Unicode glyph shown on the button.
-        public string Glyph { get; }
+        public ToolbarIcon Icon { get; }
 
         // Desktop hover bonus only; the label must carry the meaning.
         public string Tooltip { get; }

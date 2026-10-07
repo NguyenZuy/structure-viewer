@@ -47,6 +47,7 @@ Untested targets are marked as such in the README, not claimed.
 - [x] Live check, desktop Chrome: loads, no console errors; build files download in ~0.8 s. Vercel serves `.unityweb` as `application/vnd.unity` without `Content-Encoding`, so the loader decompresses Brotli in JS.
 - [x] `vercel.json` in the site repo serves the three `.unityweb` files with `Content-Encoding: br` and real content types (native decompression, streaming wasm compile). Verified: `curl --compressed` yields a valid wasm, the page loads without console errors.
 - [x] Phone over the live URL (Xiaomi 14T, Chrome 154, CDP via adb; mid/low = Chrome CPU + network throttling, GPU not throttled): high 2.5 s cold / 1.6 s cached / 60 FPS Realistic and X-ray; mid (CPU ÷2, 4G) 10.3 s / 2.5 s / 60 FPS; low (CPU ÷6, fast 3G) 45 s / 6.2 s / ~42–45 FPS. X-ray gate (≥ 30 FPS) holds.
+- [x] **Bug found on the live build**: every toolbar icon (and the phone overflow "•••" button, and the panel collapse ‹ ›) was blank. They were Unicode symbols that the Editor drew through Windows font fallback; WebGL only has the runtime font. Replaced with vector icons drawn by `Painter2D` into `VectorImage`s (`Presentation/Shell/Icons.cs`), tinted per state in USS. Guard test scans runtime string literals and UXML for non-Latin characters.
 
 ## README
 - [ ] Hero GIF (desktop) + phone clip, live demo link.

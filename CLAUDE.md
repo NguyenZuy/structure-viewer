@@ -110,6 +110,7 @@ Implementation plan, one file per phase: [docs/plan/](docs/plan/README.md). Tick
 - **Rendering**: WebGL 2 only. Keep shaders URP-compatible, no compute shaders, no geometry shaders. Watch draw calls (use GPU instancing/SRP batcher).
 - JS interop lives in `Assets/_Project/Plugins/WebGL/*.jslib` behind an Infrastructure interface, with a no-op/editor implementation so the editor and tests run without a browser.
 - Use `#if UNITY_WEBGL && !UNITY_EDITOR` only inside Infrastructure.
+- **No Unicode symbols in runtime text** (⌂ ↔ ■ •…): the Editor draws them through OS font fallback, WebGL has only the runtime font and shows nothing. Icons are vectors (`Presentation/Shell/Icons.cs`); `IconsTests.RuntimeText_UsesOnlyLatinCharacters` enforces it.
 
 ## Testing
 

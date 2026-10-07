@@ -39,6 +39,24 @@
     color: var(--color-text-disabled);
 }
 
+/* Vector icons (Icons.cs) are white images tinted per state. */
+.sv-icon,
+.sv-toolbar__glyph {
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--color-text);
+}
+
+.sv-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.sv-button:disabled .sv-icon,
+.sv-button:disabled .sv-toolbar__glyph {
+    -unity-background-image-tint-color: var(--color-text-disabled);
+}
+
 /* Toolbar */
 
 .sv-toolbar {
@@ -75,9 +93,9 @@
 }
 
 .sv-toolbar__glyph {
-    font-size: var(--font-size-xl);
-    -unity-text-align: middle-center;
-    padding: 0;
+    width: 22px;
+    height: 22px;
+    margin-bottom: 2px;
 }
 
 .sv-toolbar__label {
@@ -291,8 +309,9 @@
 }
 
 .sv-menu__item .sv-toolbar__glyph {
-    width: 32px;
-    font-size: var(--font-size-l);
+    width: 20px;
+    height: 20px;
+    margin: 0 12px 0 0;
 }
 
 .sv-menu__item .sv-toolbar__label {
@@ -301,7 +320,7 @@
 }
 
 .sv-menu__item.sv-toolbar__item--active .sv-toolbar__glyph {
-    color: var(--color-accent);
+    -unity-background-image-tint-color: var(--color-accent);
 }
 
 .sv-menu__item.sv-toolbar__item--active {

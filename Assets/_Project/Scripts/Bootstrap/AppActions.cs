@@ -82,19 +82,19 @@ namespace StructureViewer.Bootstrap
         // Toolbar order is the desktop order; priority decides what stays visible on a narrow phone toolbar.
         public void RegisterToolbar()
         {
-            Add(ShortcutMap.FitAll, "Fit all", "⌂", "Fit the whole model in view (Home)", FitAll, false, 100);
-            Add(ShortcutMap.Focus, "Focus", "◙", "Frame the selection (F)", Focus, false, 70);
-            Add(ShortcutMap.Undo, "Undo", "◄", "Undo visibility change (Ctrl+Z)", Undo, false, 80);
-            Add(ShortcutMap.Redo, "Redo", "►", "Redo (Ctrl+Y)", Redo, false, 75);
-            Add(Display, "Display", "☼", "Display mode: Realistic, Color by, X-ray, Clay (1–4)", ToggleDisplay, true, 90);
-            Add(Layers, "Layers", "≡", "Categories, levels and legend", ToggleLayers, true, 95);
-            Add(ShortcutMap.Isolate, "Isolate", "■", "Show only the selection (I)", Isolate, true, 60);
-            Add(ShortcutMap.Hide, "Hide", "□", "Hide the selection (H)", Hide, false, 55);
-            Add(ShortcutMap.ShowAll, "Show all", "○", "Reset layers, isolate and hidden (Shift+H)", ShowAll, false, 50);
-            Add(ShortcutMap.Measure, "Measure", "↔", "Measure between two points (M)", ToggleMeasure, true, 85);
-            Add(Takeoff, "Takeoff", "▬", "Material takeoff table", ToggleTakeoff, true, 45);
-            Add(LabelsToggle, "Labels", "♦", "Assembly labels", ToggleLabels, true, 40);
-            Add(MultiSelect, "Multi", "+", "Add or remove taps from the selection (Ctrl+click on desktop)", ToggleMultiSelect, true, 65);
+            Add(ShortcutMap.FitAll, "Fit all", ToolbarIcon.FitAll, "Fit the whole model in view (Home)", FitAll, false, 100);
+            Add(ShortcutMap.Focus, "Focus", ToolbarIcon.Focus, "Frame the selection (F)", Focus, false, 70);
+            Add(ShortcutMap.Undo, "Undo", ToolbarIcon.Undo, "Undo visibility change (Ctrl+Z)", Undo, false, 80);
+            Add(ShortcutMap.Redo, "Redo", ToolbarIcon.Redo, "Redo (Ctrl+Y)", Redo, false, 75);
+            Add(Display, "Display", ToolbarIcon.Display, "Display mode: Realistic, Color by, X-ray, Clay (1–4)", ToggleDisplay, true, 90);
+            Add(Layers, "Layers", ToolbarIcon.Layers, "Categories, levels and legend", ToggleLayers, true, 95);
+            Add(ShortcutMap.Isolate, "Isolate", ToolbarIcon.Isolate, "Show only the selection (I)", Isolate, true, 60);
+            Add(ShortcutMap.Hide, "Hide", ToolbarIcon.Hide, "Hide the selection (H)", Hide, false, 55);
+            Add(ShortcutMap.ShowAll, "Show all", ToolbarIcon.ShowAll, "Reset layers, isolate and hidden (Shift+H)", ShowAll, false, 50);
+            Add(ShortcutMap.Measure, "Measure", ToolbarIcon.Measure, "Measure between two points (M)", ToggleMeasure, true, 85);
+            Add(Takeoff, "Takeoff", ToolbarIcon.Takeoff, "Material takeoff table", ToggleTakeoff, true, 45);
+            Add(LabelsToggle, "Labels", ToolbarIcon.Labels, "Assembly labels", ToggleLabels, true, 40);
+            Add(MultiSelect, "Multi", ToolbarIcon.Multi, "Add or remove taps from the selection (Ctrl+click on desktop)", ToggleMultiSelect, true, 65);
 
             _labels.SetEnabled(!_shell.IsCompact);
             _registered = true;
@@ -210,8 +210,8 @@ namespace StructureViewer.Bootstrap
             RefreshToolbar();
         }
 
-        private void Add(string id, string label, string glyph, string tooltip, Action onClick, bool toggle, int priority) =>
-            _shell.AddToolbarItem(new ToolbarItem(id, label, glyph, tooltip, onClick, toggle, priority));
+        private void Add(string id, string label, ToolbarIcon icon, string tooltip, Action onClick, bool toggle, int priority) =>
+            _shell.AddToolbarItem(new ToolbarItem(id, label, icon, tooltip, onClick, toggle, priority));
 
         // Item states can only be set once the items exist.
         private void RefreshToolbar()

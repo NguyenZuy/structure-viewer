@@ -60,6 +60,20 @@ namespace StructureViewer.Tests.PlayMode.Shell
         }
 
         [UnityTest]
+        public IEnumerator Toolbar_ButtonsAndOverflow_ShowVectorIcons()
+        {
+            yield return SetPanelWidth(1280f);
+            _shell.AddToolbarItem(Item("fit", 0));
+            yield return Frames();
+
+            var glyph = Root.Q<Button>("toolbar-fit").Q(className: "sv-toolbar__glyph");
+            Assert.IsNotNull(glyph.resolvedStyle.backgroundImage.vectorImage);
+            Assert.That(glyph.resolvedStyle.width, Is.GreaterThan(0f));
+            Assert.IsNotNull(Root.Q<Button>("toolbar-overflow").Q(className: "sv-toolbar__glyph").style.backgroundImage.value.vectorImage);
+            Assert.IsNotNull(Root.Q<Button>("left-toggle").Q(className: "sv-icon").style.backgroundImage.value.vectorImage);
+        }
+
+        [UnityTest]
         public IEnumerator AddToolbarItem_CreatesTouchSizedButton()
         {
             yield return SetPanelWidth(1280f);
@@ -169,7 +183,7 @@ namespace StructureViewer.Tests.PlayMode.Shell
         }
 
         private static ToolbarItem Item(string id, int priority) =>
-            new ToolbarItem(id, id, "■", $"{id} tooltip", () => { }, priority: priority);
+            new ToolbarItem(id, id, ToolbarIcon.Isolate, $"{id} tooltip", () => { }, priority: priority);
     }
 }
 #endif

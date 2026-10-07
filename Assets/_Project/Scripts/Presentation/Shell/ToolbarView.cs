@@ -46,6 +46,8 @@ namespace StructureViewer.Presentation.Shell
             _overlay = root.Q("overlay");
             _tooltip = root.Q<Label>("tooltip");
 
+            _overflow.text = string.Empty;
+            _overflow.Add(Icons.Create(ToolbarIcon.More, "sv-toolbar__glyph"));
             _overflow.clicked += ShowMenu;
             // Tapping anywhere outside the menu closes it; the scrim also keeps that tap away from the 3D view.
             _scrim.RegisterCallback<PointerDownEvent>(evt =>
@@ -131,8 +133,7 @@ namespace StructureViewer.Presentation.Shell
             var button = new Button(onClick) { name = $"toolbar-{item.Id}" };
             button.AddToClassList("sv-button");
             button.AddToClassList(className);
-            var glyph = new Label(item.Glyph) { pickingMode = PickingMode.Ignore };
-            glyph.AddToClassList("sv-toolbar__glyph");
+            var glyph = Icons.Create(item.Icon, "sv-toolbar__glyph");
             var label = new Label(item.Label) { pickingMode = PickingMode.Ignore };
             label.AddToClassList("sv-toolbar__label");
             button.Add(glyph);

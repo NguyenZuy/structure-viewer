@@ -5,18 +5,18 @@
         <ui:VisualElement name="toolbar" class="sv-toolbar">
             <ui:Label name="app-title" class="sv-toolbar__title" text="Structure Viewer" picking-mode="Ignore" />
             <ui:VisualElement name="toolbar-items" class="sv-toolbar__items" picking-mode="Ignore" />
-            <ui:Button name="toolbar-overflow" class="sv-button sv-toolbar__overflow" text="•••" />
+            <ui:Button name="toolbar-overflow" class="sv-button sv-toolbar__overflow" />
         </ui:VisualElement>
         <ui:VisualElement name="body" class="sv-body" picking-mode="Ignore">
             <ui:VisualElement name="left-frame" class="sv-slot-frame sv-slot-frame--left" picking-mode="Ignore">
                 <ui:VisualElement name="left-slot" class="sv-slot" />
-                <ui:Button name="left-toggle" class="sv-button sv-slot-toggle" text="‹" />
+                <ui:Button name="left-toggle" class="sv-button sv-slot-toggle" />
             </ui:VisualElement>
             <ui:VisualElement name="center" class="sv-center" picking-mode="Ignore">
                 <ui:VisualElement name="bottom-slot" class="sv-slot sv-slot--bottom" />
             </ui:VisualElement>
             <ui:VisualElement name="right-frame" class="sv-slot-frame sv-slot-frame--right" picking-mode="Ignore">
-                <ui:Button name="right-toggle" class="sv-button sv-slot-toggle" text="›" />
+                <ui:Button name="right-toggle" class="sv-button sv-slot-toggle" />
                 <ui:VisualElement name="right-slot" class="sv-slot" />
             </ui:VisualElement>
         </ui:VisualElement>
