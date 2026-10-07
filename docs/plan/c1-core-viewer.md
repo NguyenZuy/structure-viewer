@@ -8,7 +8,7 @@
 - [x] Load errors → `IShell.ShowToast`.
 - [x] Extend `Setup Scene` (B04) to add `AppBootstrap`, `PointerInput`, `CameraController`, `StructureRenderer`, `ShellView` and wire serialized references.
 - [x] Toolbar: Fit all.
-- [ ] Build `Main.unity` with the B08 build menu; test on desktop and phone.
+- [ ] Build `Main.unity` with the B08 build menu; test on desktop and phone. **Deferred** (2026-10-07): run *Build WebGL (Fast)*, serve with `python Tools/serve_webgl.py Builds/WebGL`, then do the PC + mobile checks below.
 
 ## Tests
 **EditMode**: generator ↔ parser contract — `SampleHouseGenerator.Generate()` serialised → `JsonStructureParser` → zero errors, element counts match.
