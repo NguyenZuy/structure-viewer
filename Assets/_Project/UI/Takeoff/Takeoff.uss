@@ -1,0 +1,76 @@
+@import url("../Theme.uss");
+
+/* The instantiated template root, so the panel fills its slot or sheet. */
+.sv-takeoff-host {
+    flex-grow: 1;
+}
+
+.sv-takeoff {
+    flex-grow: 1;
+    min-width: 0;
+    min-height: 0;
+    padding: var(--space-s) var(--space-m);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-m);
+}
+
+.sv-takeoff__header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    min-height: var(--touch-target);
+}
+
+.sv-takeoff__title {
+    -unity-font-style: bold;
+}
+
+.sv-takeoff__toggle {
+    min-height: var(--touch-target);
+    margin: 0;
+}
+
+.sv-takeoff__toggle > .unity-label {
+    min-width: 0;
+    color: var(--color-text);
+}
+
+.sv-takeoff__empty {
+    padding: var(--space-l) 0;
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+}
+
+.sv-takeoff__table-host {
+    flex-grow: 1;
+    min-height: 120px;
+}
+
+.sv-takeoff__table {
+    flex-grow: 1;
+}
+
+.sv-takeoff__cell {
+    padding: 0 var(--space-s);
+    -unity-text-align: middle-left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sv-takeoff__cell--numeric {
+    -unity-text-align: middle-right;
+}
+
+.sv-takeoff__cell--total {
+    -unity-font-style: bold;
+    color: var(--color-text);
+}
+
+.sv-takeoff__swatch {
+    width: 14px;
+    height: 14px;
+    margin: 9px 7px;
+    border-radius: var(--radius-s);
+}

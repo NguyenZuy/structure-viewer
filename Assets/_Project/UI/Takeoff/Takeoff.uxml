@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="Takeoff.uss" />
+    <ui:VisualElement name="takeoff-root" class="sv-takeoff">
+        <ui:VisualElement class="sv-takeoff__header">
+            <ui:Label class="sv-takeoff__title" text="Material takeoff" />
+            <ui:Toggle name="takeoff-visible-only" class="sv-takeoff__toggle" label="Visible only" />
+        </ui:VisualElement>
+        <ui:Label name="takeoff-empty" class="sv-takeoff__empty" text="No structure loaded" />
+        <ui:VisualElement name="takeoff-table-host" class="sv-takeoff__table-host" />
+    </ui:VisualElement>
+</ui:UXML>
