@@ -41,6 +41,7 @@ namespace StructureViewer.Editor.Build
             PlayerSettings.productName = "Structure Viewer";
             // The splash costs a large logo texture and seconds before the model shows; optional for every licence since Unity 6.
             PlayerSettings.SplashScreen.show = false;
+            PlayerSettings.SplashScreen.showUnityLogo = false;
             PlayerSettings.colorSpace = ColorSpace.Linear;
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.WebGL, false);
             PlayerSettings.SetGraphicsAPIs(BuildTarget.WebGL, new[] { GraphicsDeviceType.OpenGLES3 });

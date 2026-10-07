@@ -15,6 +15,7 @@ MonoBehaviour:
   _wood: {fileID: 2100000, guid: fab10a87cfda3a146aca82e465231883, type: 2}
   _concrete: {fileID: 2100000, guid: 8ef55979680ac804a857908b94a476fe, type: 2}
   _sheathing: {fileID: 2100000, guid: deb6d53965982b848b62e21550141aff, type: 2}
+  _glass: {fileID: 2100000, guid: fb95baecedc4d564f8dba5709e83d930, type: 2}
   _flatOpaque: {fileID: 2100000, guid: 5df36b4e32549484caeac0f2c56e2357, type: 2}
   _flatTransparent: {fileID: 2100000, guid: fa61cefd504347a45831d8b6e92b8a15, type: 2}
   _overlay: {fileID: 0}
