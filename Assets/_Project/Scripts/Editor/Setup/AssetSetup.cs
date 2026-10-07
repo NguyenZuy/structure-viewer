@@ -33,6 +33,7 @@ namespace StructureViewer.Editor.Setup
         private static readonly Color32 GridLine = new Color32(70, 74, 82, 120);
 
         private static readonly Color Sheathing = new Color(0.55f, 0.36f, 0.96f, 0.35f);
+        private static readonly Color Glass = new Color(0.18f, 0.27f, 0.33f, 0.8f);
         private static readonly Color FlatTransparent = new Color(1f, 1f, 1f, 0.3f);
 
         public static RenderingConfig Run(SetupPaths paths)
@@ -52,6 +53,9 @@ namespace StructureViewer.Editor.Setup
             var sheathing = EnsureMaterial(paths.Material("Sheathing"), LitShader);
             SetupLit(sheathing, Sheathing, 0.2f, transparent: true);
 
+            var glass = EnsureMaterial(paths.Material("Glass"), LitShader);
+            SetupLit(glass, Glass, 0.92f, transparent: true, preserveSpecular: true);
+
             var flatOpaque = EnsureMaterial(paths.Material("FlatOpaque"), LitShader);
             SetupLit(flatOpaque, Color.white, 0.2f, transparent: false);
 
@@ -66,6 +70,7 @@ namespace StructureViewer.Editor.Setup
             so.FindProperty("_wood").objectReferenceValue = wood;
             so.FindProperty("_concrete").objectReferenceValue = concrete;
             so.FindProperty("_sheathing").objectReferenceValue = sheathing;
+            so.FindProperty("_glass").objectReferenceValue = glass;
             so.FindProperty("_flatOpaque").objectReferenceValue = flatOpaque;
             so.FindProperty("_flatTransparent").objectReferenceValue = flatTransparent;
             so.FindProperty("_grid").objectReferenceValue = gridMaterial;
@@ -150,7 +155,7 @@ namespace StructureViewer.Editor.Setup
         }
 
         private static void SetupLit(Material material, Color color, float smoothness, bool transparent,
-            Texture2D albedo = null, Texture2D normal = null, float tileMetres = 1f)
+            Texture2D albedo = null, Texture2D normal = null, float tileMetres = 1f, bool preserveSpecular = false)
         {
             material.SetFloat("_WorkflowMode", 1f);
             material.SetColor("_BaseColor", color);
@@ -163,6 +168,8 @@ namespace StructureViewer.Editor.Setup
             // No reflection probes and a solid-colour background: environment reflections would only add a sky tint.
             material.SetFloat("_EnvironmentReflections", 0f);
             SetSurface(material, transparent);
+            // Alpha would otherwise fade highlights along with the surface; glass is mostly highlight.
+            material.SetFloat("_BlendModePreserveSpecular", preserveSpecular ? 1f : 0f);
             BaseShaderGUI.SetMaterialKeywords(material, LitGUI.SetMaterialKeywords);
             EditorUtility.SetDirty(material);
         }

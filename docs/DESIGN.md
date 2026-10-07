@@ -156,7 +156,7 @@ Switch via the toolbar "Display" dropdown (mobile: overflow menu) or keys `1`–
 
 | Mode | Members | Slab | Sheathing | Selection highlight |
 |---|---|---|---|---|
-| **1. Realistic** | Wood albedo + normal (URP Lit) | Concrete texture | Per type, mostly opaque (α ≈ 0.9) so the house reads as enclosed with the frame faintly visible: walls white house wrap, roofs charcoal shingle tone, floors OSB. Doors opaque colonial red, glazing pale blue (α ≈ 0.4) | Member: wood tinted orange. Assembly: wood tinted blue |
+| **1. Realistic** | Wood albedo + normal (URP Lit) | Concrete texture | Per type, mostly opaque (α ≈ 0.9) so the house reads as enclosed with the frame faintly visible: walls white house wrap, roofs charcoal shingle tone, floors OSB. Doors opaque colonial red; glazing dark blue-grey (α ≈ 0.8) on a glossy Glass template with preserved specular | Member: wood tinted orange. Assembly: wood tinted blue |
 | **2. Color by** `Category` / `Type` / `Level` | Flat colour per key (URP Lit, low smoothness, no texture) | Colour of its key | Colour of its key, translucent (α ≈ 0.35) | Flat orange / blue |
 | **3. X-ray** | Translucent pale blue-grey (α ≈ 0.12, no depth write) | Same, α ≈ 0.08 | Same, α ≈ 0.08 | **Opaque** orange / blue, so the selection pops out of the ghosted model |
 | **4. Clay** | Matte off-white `#E8E6E1` | Slightly darker `#CFCBC4` | Translucent white (α ≈ 0.25) | Flat orange / blue |

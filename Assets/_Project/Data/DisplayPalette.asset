@@ -19,7 +19,7 @@ MonoBehaviour:
   _realisticRoofSheathing: {r: 0.25490198, g: 0.27450982, b: 0.3019608, a: 0.95}
   _realisticSheathing: {r: 0.7882353, g: 0.6431373, b: 0.41568628, a: 0.85}
   _realisticDoor: {r: 0.48235294, g: 0.1764706, b: 0.14901961, a: 1}
-  _realisticGlass: {r: 0.6627451, g: 0.78431374, b: 0.85490197, a: 0.4}
+  _realisticGlass: {r: 0.18431373, g: 0.27450982, b: 0.32941177, a: 0.8}
   _categoryColors:
   - {r: 0.35686275, g: 0.5529412, b: 0.65882355, a: 1}
   - {r: 0.37254903, g: 0.6392157, b: 0.3529412, a: 1}

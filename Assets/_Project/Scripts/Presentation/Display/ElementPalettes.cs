@@ -31,7 +31,9 @@ namespace StructureViewer.Presentation.Display
                 var tone = _palette.RealisticPanelFor(element.Info.Type);
                 var color = state == HighlightState.None ? tone : Highlight(_palette, state);
                 color.a = tone.a;
-                return _library.Get(config.Sheathing, color);
+                // Glazing gets its own glossy template; older configs without one fall back to sheathing.
+                var panelTemplate = element.Info.Type == "Window" && config.Glass != null ? config.Glass : config.Sheathing;
+                return _library.Get(panelTemplate, color);
             }
 
             var template = element.Kind == ElementKind.Slab ? config.Concrete : config.Wood;

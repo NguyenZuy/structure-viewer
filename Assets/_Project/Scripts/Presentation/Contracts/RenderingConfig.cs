@@ -9,6 +9,7 @@ namespace StructureViewer.Presentation.Contracts
         [SerializeField] private Material _wood;
         [SerializeField] private Material _concrete;
         [SerializeField] private Material _sheathing;
+        [SerializeField] private Material _glass;
         [SerializeField] private Material _flatOpaque;
         [SerializeField] private Material _flatTransparent;
         [SerializeField] private Material _overlay;
@@ -19,6 +20,9 @@ namespace StructureViewer.Presentation.Contracts
 
         // Transparent, rendered after opaques.
         public Material Sheathing => _sheathing;
+
+        // Transparent and glossy, with specular kept at full strength so the sun glints on window panes.
+        public Material Glass => _glass;
 
         // Templates cloned by display modes; surface type is never switched at runtime (variants may be stripped).
         public Material FlatOpaque => _flatOpaque;

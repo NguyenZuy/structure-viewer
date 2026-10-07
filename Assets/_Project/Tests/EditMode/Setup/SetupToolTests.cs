@@ -61,6 +61,7 @@ namespace StructureViewer.Tests.EditMode.Setup
             Assert.IsNotNull(config.Wood);
             Assert.IsNotNull(config.Concrete);
             Assert.IsNotNull(config.Sheathing);
+            Assert.IsNotNull(config.Glass);
             Assert.IsNotNull(config.FlatOpaque);
             Assert.IsNotNull(config.FlatTransparent);
             Assert.IsNotNull(config.Grid);
@@ -75,6 +76,8 @@ namespace StructureViewer.Tests.EditMode.Setup
             Assert.That(config.FlatOpaque.renderQueue, Is.LessThan(2500));
             Assert.That(config.FlatTransparent.renderQueue, Is.GreaterThanOrEqualTo(3000));
             Assert.That(config.Sheathing.renderQueue, Is.GreaterThanOrEqualTo(3000));
+            Assert.That(config.Glass.renderQueue, Is.GreaterThanOrEqualTo(3000));
+            Assert.Greater(config.Glass.GetFloat("_Smoothness"), config.Sheathing.GetFloat("_Smoothness"));
             Assert.That(config.Grid.renderQueue, Is.LessThan(config.Sheathing.renderQueue));
         }
 

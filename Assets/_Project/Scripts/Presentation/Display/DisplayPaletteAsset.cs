@@ -24,8 +24,8 @@ namespace StructureViewer.Presentation.Display
         [SerializeField] private Color _realisticSheathing = Hex("#C9A46A", 0.85f);
         [Tooltip("Door leaves: painted colonial red, opaque.")]
         [SerializeField] private Color _realisticDoor = Hex("#7B2D26");
-        [Tooltip("Window glazing: pale blue, see-through.")]
-        [SerializeField] private Color _realisticGlass = Hex("#A9C8DA", 0.4f);
+        [Tooltip("Window glazing: dark blue-grey, mostly opaque like real windows seen from outside; the glossy Glass template adds the sheen.")]
+        [SerializeField] private Color _realisticGlass = Hex("#2F4654", 0.8f);
 
         [Header("Color by")]
         [Tooltip("Indexed by ElementCategory: Wall, Floor, Roof, Sheathing, Slab, Opening.")]

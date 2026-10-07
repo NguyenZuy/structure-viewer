@@ -89,10 +89,24 @@ namespace StructureViewer.Tests.EditMode.Display
         }
 
         [Test]
-        public void Realistic_Glazing_IsSeeThrough_DoorIsSolid()
+        public void Realistic_Glazing_IsTranslucent_DoorIsSolid()
         {
-            Assert.Less(_palette.RealisticGlass.a, 0.6f);
+            Assert.Less(_palette.RealisticGlass.a, 1f);
             Assert.AreEqual(1f, _palette.RealisticDoor.a);
+        }
+
+        [Test]
+        public void Realistic_Window_UsesTheGlossyGlassTemplate()
+        {
+            var info = new ElementInfo("W-WN01", ElementCategory.Opening, "Window", "W", 0);
+            var corners = new[] { Vector3.zero, Vector3.right, new Vector3(1f, 1f, 0f), Vector3.up };
+            var window = Element.ForPanel(0, info, new Panel(corners, 0.006f));
+
+            var material = new RealisticPalette(_library, _palette).Resolve(window, HighlightState.None);
+
+            Assert.AreEqual(_config.Glass.GetFloat("_Smoothness"), material.GetFloat("_Smoothness"));
+            AssertColor(_palette.RealisticGlass, material.GetColor("_BaseColor"));
+            Assert.IsFalse(IsOpaque(material));
         }
 
         [Test]
