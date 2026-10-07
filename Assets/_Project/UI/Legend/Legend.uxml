@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="Legend.uss" />
+    <ui:VisualElement name="legend-root" class="sv-legend">
+        <ui:Label name="legend-title" class="sv-legend__title" />
+        <ui:ScrollView name="legend-scroll" class="sv-legend__scroll">
+            <ui:VisualElement name="legend-rows" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

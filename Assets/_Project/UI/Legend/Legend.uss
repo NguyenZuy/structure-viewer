@@ -1,0 +1,59 @@
+@import url("../Theme.uss");
+
+/* The instantiated template root, so the panel fills its slot or sheet. */
+.sv-legend-host {
+    flex-grow: 1;
+}
+
+.sv-legend {
+    flex-grow: 1;
+    min-width: 0;
+    padding: var(--space-m);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-m);
+}
+
+.sv-legend__title {
+    margin-bottom: var(--space-s);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-s);
+    -unity-font-style: bold;
+}
+
+.sv-legend__scroll {
+    flex-grow: 1;
+}
+
+.sv-legend__row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 28px;
+}
+
+/* Every element with this key is hidden: keep the row so the palette stays readable, but grey it out. */
+.sv-legend__row--hidden {
+    opacity: 0.4;
+}
+
+.sv-legend__swatch {
+    width: 16px;
+    height: 16px;
+    margin-right: var(--space-s);
+    border-radius: var(--radius-s);
+    border-width: 1px;
+    border-color: var(--color-border);
+    flex-shrink: 0;
+}
+
+.sv-legend__label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.sv-legend__count {
+    margin-left: var(--space-s);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-right;
+}
